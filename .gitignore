@@ -21,3 +21,23 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# MacOs file
+.DS_Store
+
+# Intellij
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Vs code
+.settings/
+.vscode/
+.factorypath
+
+#Gradle
+.gradletasknamecache
+.gradle/
+build/
+bin/
