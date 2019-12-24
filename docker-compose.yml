@@ -1,0 +1,24 @@
+version: '3'
+services:
+  spark_server:
+    container_name: spark_server
+    build:
+      context: .
+      dockerfile: ./docker/server.dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres_db
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: supersecret
+  postgres_db:
+    container_name: postgres_db
+    build:
+      context: .
+      dockerfile: ./docker/postgres.dockerfile
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: shopping_cart
+      POSTGRES_PASSWORD: supersecret
