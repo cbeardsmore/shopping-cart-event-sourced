@@ -1,12 +1,18 @@
 package com.cbeardsmore.scart.rest;
 
 import com.cbeardsmore.scart.domain.CommandHandler;
+import com.cbeardsmore.scart.domain.command.AddProductCommand;
+import com.cbeardsmore.scart.domain.command.CheckoutCommand;
 import com.cbeardsmore.scart.domain.command.CreateCartCommand;
+import com.cbeardsmore.scart.domain.command.RemoveProductCommand;
+import com.cbeardsmore.scart.rest.request.AddProductRequest;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
+
+import java.util.UUID;
 
 import static spark.Spark.*;
 
@@ -15,6 +21,9 @@ public class Server {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
     private static final String JSON_CONTENT = "application/json";
+
+    private static final String PATH_PARAM_CART_ID = "cartId";
+    private static final String PATH_PARAM_PRODUCT_ID = "productId";
 
     private final Gson gson;
     private final CommandHandler commandHandler;
@@ -33,6 +42,9 @@ public class Server {
 
         path("/cart", () -> {
            post("/create", JSON_CONTENT, this::createCart, gson::toJson);
+            post("/:cartId", JSON_CONTENT, this::addItem, gson::toJson);
+            post("/:cartId/checkout", JSON_CONTENT, this::checkout, gson::toJson);
+            delete("/:cartId/product/:productId", JSON_CONTENT, this::removeItem, gson::toJson);
         });
 
         exception(RuntimeException.class, (ex, req, res) -> handleUnexpected(ex, res));
@@ -40,6 +52,23 @@ public class Server {
 
     private Object createCart(Request request, Response response) {
         return commandHandler.handle(new CreateCartCommand());
+    }
+
+    private Object addItem(Request request, Response response) {
+        final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
+        final var payload = gson.fromJson(request.body(), AddProductRequest.class);
+        final var command = payload.toCommand(cartId);
+        return commandHandler.handle(command);
+    }
+
+    private Object checkout(Request request, Response response) {
+        final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
+        return commandHandler.handle(new CheckoutCommand(cartId));
+    }
+
+    private Object removeItem(Request request, Response response) {
+        final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
+        return commandHandler.handle(new RemoveProductCommand(cartId));
     }
 
     private void handleUnexpected(RuntimeException ex, Response res) {
