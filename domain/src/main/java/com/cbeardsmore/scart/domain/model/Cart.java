@@ -21,19 +21,19 @@ public class Cart extends AggregateRoot {
         registerHandler(CheckoutCompletedEvent.class, this::handle);
     }
 
-    private void createCart(CreateCartCommand command) {
+    public void createCart(CreateCartCommand command) {
         addEvent(new CartCreatedEvent());
     }
 
-    private void addProduct(AddProductCommand command) {
+    public void addProduct(AddProductCommand command) {
         addEvent(new ProductAddedEvent());
     }
 
-    private void removeProduct(RemoveProductCommand command) {
+    public void removeProduct(RemoveProductCommand command) {
         addEvent(new ProductRemovedEvent());
     }
 
-    private void checkout(CheckoutCommand command) {
+    public void checkout(CheckoutCommand command) {
         addEvent(new CheckoutCompletedEvent());
     }
 
