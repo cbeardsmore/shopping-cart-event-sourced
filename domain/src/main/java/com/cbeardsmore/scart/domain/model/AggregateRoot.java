@@ -20,6 +20,18 @@ abstract class AggregateRoot {
         this.id = id;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
     protected <T> void registerHandler(Class<T> payloadType, Consumer<T> handler) {
         handlerRegistry.put(payloadType, handler);
     }
@@ -29,7 +41,7 @@ abstract class AggregateRoot {
         apply(event);
     }
 
-    private void apply(Event event) {
+    public void apply(Event event) {
         final var handler = handlerRegistry.get(event.getClass());
         handler.accept(event);
         version++;
