@@ -1,6 +1,7 @@
 dependencies {
     compile 'org.slf4j:slf4j-simple:1.7.27'
     compile project(':rest')
+    compile project(':dataaccess')
     compile project(':domain')
 }
 
