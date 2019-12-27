@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public class CreateCartCommand implements Command {
 
-    private final UUID uuid;
+    private final UUID id;
 
     public CreateCartCommand() {
-        this.uuid = UUID.randomUUID();
+        this.id = UUID.randomUUID();
     }
 }

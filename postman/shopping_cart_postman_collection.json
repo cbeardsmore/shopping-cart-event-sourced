@@ -1,0 +1,338 @@
+{
+	"info": {
+		"_postman_id": "229d9799-8a29-48b0-95b3-81c3adccc203",
+		"name": "shopping_cart",
+		"description": "Postman scripts for testing of the Shopping Cart REST API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8db2a2ba-b7bb-4d86-979b-d3ed77dcb63a",
+						"exec": [
+							"pm.test(\"Status code is 200-OK\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/ping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "options",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8db2a2ba-b7bb-4d86-979b-d3ed77dcb63a",
+						"exec": [
+							"pm.test(\"Status code is 200-OK\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Access-Control-Allow-Methods is set\", function () {",
+							"    pm.response.to.have.header(\"Access-Control-Allow-Methods\", \"GET, POST, HEAD, OPTIONS\");",
+							"});",
+							"",
+							"pm.test(\"Access-Control-Allow-Origin is set\", function () {",
+							"    pm.response.to.have.header(\"Access-Control-Allow-Origin\", \"*\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "OPTIONS",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/cart/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cart",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ebf271b9-3aac-49d5-a6a3-e266d9499ac6",
+						"exec": [
+							"pm.test(\"Status code is 200-OK\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response is NULL\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.eql(null);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/cart/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cart",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addProduct",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ebf271b9-3aac-49d5-a6a3-e266d9499ac6",
+						"exec": [
+							"pm.test(\"Status code is 200-OK\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response is NULL\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.eql(null);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"productId\": \"1f7ffe71-c21b-4cf6-98c3-8da3637923d3\",\n\t\"name\": \"42\\\" LG TV\",\n\t\"price\": \"49.99\",\n\t\"quantity\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/cart/e0c3e442-a731-456a-b2f8-d4cd48f95c8c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cart",
+						"e0c3e442-a731-456a-b2f8-d4cd48f95c8c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeProduct",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ebf271b9-3aac-49d5-a6a3-e266d9499ac6",
+						"exec": [
+							"pm.test(\"Status code is 200-OK\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response is NULL\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.eql(null);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/cart/e0c3e442-a731-456a-b2f8-d4cd48f95c8c/product/1f7ffe71-c21b-4cf6-98c3-8da3637923d3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cart",
+						"e0c3e442-a731-456a-b2f8-d4cd48f95c8c",
+						"product",
+						"1f7ffe71-c21b-4cf6-98c3-8da3637923d3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ebf271b9-3aac-49d5-a6a3-e266d9499ac6",
+						"exec": [
+							"pm.test(\"Status code is 200-OK\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response is NULL\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.eql(null);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"productId\": \"1f7ffe71-c21b-4cf6-98c3-8da3637923d3\",\n\t\"name\": \"42\\\" LG TV\",\n\t\"price\": \"49.99\",\n\t\"quantity\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/cart/e0c3e442-a731-456a-b2f8-d4cd48f95c8c/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cart",
+						"e0c3e442-a731-456a-b2f8-d4cd48f95c8c",
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
