@@ -14,6 +14,14 @@ A shopping cart system in Java11 implementing Event Sourcing (ES) and Command Qu
 
 `docker-compose up --build`
 
+
+- To test via Postman while running:
+
+```
+npm install -g newman
+./postman/test.sh
+```
+
 ### Gradle
 
 `gradle clean build`
