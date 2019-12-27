@@ -1,6 +1,7 @@
 package com.cbeardsmore.scart.domain.command;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 public class AddProductCommand implements Command {
@@ -17,5 +18,28 @@ public class AddProductCommand implements Command {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("AddProductCommand[cartId=%s,productId=%s,name=%s,price=%s,quantity=%d]",
+                cartId, productId, name, price, quantity);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AddProductCommand that = (AddProductCommand) o;
+        return quantity == that.quantity &&
+                Objects.equals(cartId, that.cartId) &&
+                Objects.equals(productId, that.productId) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cartId, productId, name, price, quantity);
     }
 }
