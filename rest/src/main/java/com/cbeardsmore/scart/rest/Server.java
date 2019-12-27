@@ -7,6 +7,7 @@ import com.cbeardsmore.scart.domain.command.CreateCartCommand;
 import com.cbeardsmore.scart.domain.command.RemoveProductCommand;
 import com.cbeardsmore.scart.rest.request.AddProductRequest;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
@@ -41,12 +42,13 @@ public class Server {
         get("/ping", JSON_CONTENT, ((request, response) -> 200));
 
         path("/cart", () -> {
-           post("/create", JSON_CONTENT, this::createCart, gson::toJson);
+            post("/create", JSON_CONTENT, this::createCart, gson::toJson);
             post("/:cartId", JSON_CONTENT, this::addItem, gson::toJson);
             post("/:cartId/checkout", JSON_CONTENT, this::checkout, gson::toJson);
             delete("/:cartId/product/:productId", JSON_CONTENT, this::removeItem, gson::toJson);
         });
 
+        exception(JsonSyntaxException.class, (ex, req, res) -> handleException(ex, res));
         exception(RuntimeException.class, (ex, req, res) -> handleUnexpected(ex, res));
     }
 
@@ -68,7 +70,14 @@ public class Server {
 
     private Object removeItem(Request request, Response response) {
         final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
-        return commandHandler.handle(new RemoveProductCommand(cartId));
+        final var productId = UUID.fromString(request.params(PATH_PARAM_PRODUCT_ID));
+        return commandHandler.handle(new RemoveProductCommand(cartId, productId));
+    }
+
+    private void handleException(JsonSyntaxException ex, Response res) {
+        LOGGER.error("JsonSyntaxException caught by server: {}", ex.getMessage());
+        res.body("Bad Request");
+        res.status(400);
     }
 
     private void handleUnexpected(RuntimeException ex, Response res) {
@@ -80,7 +89,6 @@ public class Server {
     private void setAccessControlHeaders(Request request, Response response) {
         response.header("Access-Control-Allow-Methods", "GET, POST, HEAD, OPTIONS");
         response.header("Access-Control-Allow-Origin", "*");
-        response.header("Access-Control-Allow-Headers", "Authorization");
         response.type("application/json");
     }
 }
