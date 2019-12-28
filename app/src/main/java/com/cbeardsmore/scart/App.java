@@ -1,5 +1,6 @@
 package com.cbeardsmore.scart;
 
+import com.cbeardsmore.scart.dataaccess.PostgresRepository;
 import com.cbeardsmore.scart.domain.CommandHandler;
 import com.cbeardsmore.scart.rest.Server;
 import org.slf4j.Logger;
@@ -11,7 +12,8 @@ public class App {
 
     public static void main(String[] args) {
         LOGGER.info("Starting Shopping Cart Server...");
-        final var commandHandler = new CommandHandler();
+        final var repository = new PostgresRepository("jdbc:postgresql://postgres_db:5432/shopping_cart?user=postgres&password=supersecret");
+        final var commandHandler = new CommandHandler(repository);
         final var server = new Server(commandHandler);
         server.serve(8080);
     }

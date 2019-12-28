@@ -11,6 +11,10 @@ public class CreateCartCommand implements Command {
         this.id = UUID.randomUUID();
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return String.format("CreateCartCommand[id=%s]", id);

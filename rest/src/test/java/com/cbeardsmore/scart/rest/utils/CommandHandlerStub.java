@@ -14,7 +14,7 @@ public class CommandHandlerStub extends CommandHandler {
     private RuntimeException nextException;
 
     CommandHandlerStub() {
-        super();
+        super(null);
     }
 
     @Override
