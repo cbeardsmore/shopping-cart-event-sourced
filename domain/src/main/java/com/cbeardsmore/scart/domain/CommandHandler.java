@@ -5,6 +5,7 @@ import com.cbeardsmore.scart.domain.command.CheckoutCommand;
 import com.cbeardsmore.scart.domain.command.CreateCartCommand;
 import com.cbeardsmore.scart.domain.command.RemoveProductCommand;
 import com.cbeardsmore.scart.domain.model.Cart;
+import com.cbeardsmore.scart.domain.model.Receipt;
 
 public class CommandHandler {
 
@@ -14,25 +15,31 @@ public class CommandHandler {
         this.repository = repository;
     }
 
-    public Object handle(CreateCartCommand command) {
+    public Receipt handle(CreateCartCommand command) {
         final Cart cart = repository.load(command.getId());
         cart.createCart(command);
         repository.save(cart);
-        return null;
+        return new Receipt(cart.getId());
     }
 
-    public Object handle(AddProductCommand command) {
+    public Receipt handle(AddProductCommand command) {
         final Cart cart = repository.load(command.getCartId());
         cart.addProduct(command);
         repository.save(cart);
-        return null;
+        return new Receipt(cart.getId());
     }
 
-    public Object handle(CheckoutCommand command) {
-        return null;
+    public Receipt handle(RemoveProductCommand command) {
+        final Cart cart = repository.load(command.getCartId());
+        cart.removeProduct(command);
+        repository.save(cart);
+        return new Receipt(cart.getId());
     }
 
-    public Object handle(RemoveProductCommand command) {
-        return null;
+    public Receipt handle(CheckoutCommand command) {
+        final Cart cart = repository.load(command.getCartId());
+        cart.checkout(command);
+        repository.save(cart);
+        return new Receipt(cart.getId());
     }
 }

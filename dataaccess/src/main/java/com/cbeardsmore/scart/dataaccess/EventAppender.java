@@ -1,6 +1,7 @@
 package com.cbeardsmore.scart.dataaccess;
 
 import com.cbeardsmore.scart.domain.event.Event;
+import com.cbeardsmore.scart.domain.event.EventType;
 import com.google.gson.Gson;
 import org.postgresql.util.PGobject;
 
@@ -34,7 +35,7 @@ final class EventAppender {
                 statement.setString(1, streamType);
                 statement.setString(2, streamId);
                 statement.setInt(3, version);
-                statement.setString(4, event.getClass().toString());
+                statement.setString(4, EventType.fromClass(event.getClass()).name());
                 statement.setObject(5, payloadJson);
                 statement.executeUpdate();
                 version++;

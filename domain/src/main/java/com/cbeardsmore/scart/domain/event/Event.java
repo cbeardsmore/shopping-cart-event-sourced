@@ -1,4 +1,4 @@
 package com.cbeardsmore.scart.domain.event;
 
-public interface Event {
+public abstract class Event {
 }

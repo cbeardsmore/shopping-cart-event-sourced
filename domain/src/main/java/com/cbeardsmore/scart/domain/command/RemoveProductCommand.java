@@ -13,6 +13,10 @@ public class RemoveProductCommand implements Command {
         this.productId = productId;
     }
 
+    public UUID getCartId() {
+        return cartId;
+    }
+
     @Override
     public String toString() {
         return String.format("RemoveProductCommand{cartId=%s,productId=%s}", cartId, productId);

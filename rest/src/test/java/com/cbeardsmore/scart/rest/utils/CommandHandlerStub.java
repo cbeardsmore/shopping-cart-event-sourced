@@ -6,6 +6,7 @@ import com.cbeardsmore.scart.domain.command.CheckoutCommand;
 import com.cbeardsmore.scart.domain.command.Command;
 import com.cbeardsmore.scart.domain.command.CreateCartCommand;
 import com.cbeardsmore.scart.domain.command.RemoveProductCommand;
+import com.cbeardsmore.scart.domain.model.Receipt;
 
 public class CommandHandlerStub extends CommandHandler {
 
@@ -18,28 +19,28 @@ public class CommandHandlerStub extends CommandHandler {
     }
 
     @Override
-    public Object handle(CreateCartCommand command) {
+    public Receipt handle(CreateCartCommand command) {
         throwNextIfRequired();
         lastCommand = command;
         return null;
     }
 
     @Override
-    public Object handle(AddProductCommand command) {
+    public Receipt handle(AddProductCommand command) {
         throwNextIfRequired();
         lastCommand = command;
         return null;
     }
 
     @Override
-    public Object handle(RemoveProductCommand command) {
+    public Receipt handle(RemoveProductCommand command) {
         throwNextIfRequired();
         lastCommand = command;
         return null;
     }
 
     @Override
-    public Object handle(CheckoutCommand command) {
+    public Receipt handle(CheckoutCommand command) {
         throwNextIfRequired();
         lastCommand = command;
         return null;

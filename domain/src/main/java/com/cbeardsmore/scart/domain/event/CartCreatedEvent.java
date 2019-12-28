@@ -1,4 +1,7 @@
 package com.cbeardsmore.scart.domain.event;
 
-public class CartCreatedEvent implements Event {
+public final class CartCreatedEvent extends Event {
+
+    public CartCreatedEvent() {
+    }
 }

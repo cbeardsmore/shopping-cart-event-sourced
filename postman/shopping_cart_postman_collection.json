@@ -96,10 +96,13 @@
 							"pm.test(\"Status code is 200-OK\", function() {",
 							"    pm.response.to.have.status(200);",
 							"});",
-							"pm.test(\"Response is NULL\", function () {",
+							"",
+							"pm.test(\"Response has CartId\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.eql(null);",
-							"});"
+							"    pm.expect(jsonData.aggregateId).to.not.eql(undefined);",
+							"});",
+							"",
+							"pm.environment.set(\"CART_ID\", pm.response.json().aggregateId);"
 						],
 						"type": "text/javascript"
 					}
@@ -158,10 +161,12 @@
 							"pm.test(\"Status code is 200-OK\", function() {",
 							"    pm.response.to.have.status(200);",
 							"});",
-							"pm.test(\"Response is NULL\", function () {",
+							"",
+							"pm.test(\"Response has CartId\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.eql(null);",
-							"});"
+							"    pm.expect(jsonData.aggregateId).to.not.eql(undefined);",
+							"});",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -186,7 +191,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"productId\": \"1f7ffe71-c21b-4cf6-98c3-8da3637923d3\",\n\t\"name\": \"42\\\" LG TV\",\n\t\"price\": \"49.99\",\n\t\"quantity\": 1\n}",
+					"raw": "{\n\t\"productId\": \"b00535eb-3adb-417d-b93a-f79bd299f330\",\n\t\"name\": \"42\\\" LG TV\",\n\t\"price\": \"49.99\",\n\t\"quantity\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -194,7 +199,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/cart/e0c3e442-a731-456a-b2f8-d4cd48f95c8c",
+					"raw": "http://localhost:8080/cart/{{CART_ID}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -202,7 +207,7 @@
 					"port": "8080",
 					"path": [
 						"cart",
-						"e0c3e442-a731-456a-b2f8-d4cd48f95c8c"
+						"{{CART_ID}}"
 					]
 				}
 			},
@@ -219,10 +224,12 @@
 							"pm.test(\"Status code is 200-OK\", function() {",
 							"    pm.response.to.have.status(200);",
 							"});",
-							"pm.test(\"Response is NULL\", function () {",
+							"",
+							"pm.test(\"Response has CartId\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.eql(null);",
-							"});"
+							"    pm.expect(jsonData.aggregateId).to.not.eql(undefined);",
+							"});",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -255,7 +262,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/cart/e0c3e442-a731-456a-b2f8-d4cd48f95c8c/product/1f7ffe71-c21b-4cf6-98c3-8da3637923d3",
+					"raw": "http://localhost:8080/cart/{{CART_ID}}/product/b00535eb-3adb-417d-b93a-f79bd299f330",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -263,9 +270,9 @@
 					"port": "8080",
 					"path": [
 						"cart",
-						"e0c3e442-a731-456a-b2f8-d4cd48f95c8c",
+						"{{CART_ID}}",
 						"product",
-						"1f7ffe71-c21b-4cf6-98c3-8da3637923d3"
+						"b00535eb-3adb-417d-b93a-f79bd299f330"
 					]
 				}
 			},
@@ -282,10 +289,12 @@
 							"pm.test(\"Status code is 200-OK\", function() {",
 							"    pm.response.to.have.status(200);",
 							"});",
-							"pm.test(\"Response is NULL\", function () {",
+							"",
+							"pm.test(\"Response has CartId\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.eql(null);",
-							"});"
+							"    pm.expect(jsonData.aggregateId).to.not.eql(undefined);",
+							"});",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -318,7 +327,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/cart/e0c3e442-a731-456a-b2f8-d4cd48f95c8c/checkout",
+					"raw": "http://localhost:8080/cart/{{CART_ID}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -326,12 +335,19 @@
 					"port": "8080",
 					"path": [
 						"cart",
-						"e0c3e442-a731-456a-b2f8-d4cd48f95c8c",
-						"checkout"
+						"{{CART_ID}}"
 					]
 				}
 			},
 			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "a4744b8c-2d10-4ae3-bd86-0c022efc3d91",
+			"key": "CART_ID",
+			"value": "",
+			"type": "string"
 		}
 	],
 	"protocolProfileBehavior": {}

@@ -20,8 +20,8 @@ public class AddProductCommand implements Command {
         this.quantity = quantity;
     }
 
-    public AddProductCommand(UUID cartId) {
-        this.cartId = cartId;
+    public UUID getCartId() {
+        return cartId;
     }
 
     @Override
