@@ -1,4 +1,4 @@
 package com.cbeardsmore.scart.domain.event;
 
-public class CheckoutCompletedEvent extends Event {
+public final class CheckoutCompletedEvent extends Event {
 }

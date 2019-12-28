@@ -1,4 +1,4 @@
 package com.cbeardsmore.scart.domain.event;
 
-public class ProductAddedEvent extends Event {
+public final class ProductAddedEvent extends Event {
 }

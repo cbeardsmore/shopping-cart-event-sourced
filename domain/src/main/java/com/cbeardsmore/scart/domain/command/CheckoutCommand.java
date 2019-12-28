@@ -1,5 +1,7 @@
 package com.cbeardsmore.scart.domain.command;
 
+import com.cbeardsmore.scart.domain.exception.CommandValidationException;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -8,6 +10,8 @@ public class CheckoutCommand implements Command {
     private final UUID cartId;
 
     public CheckoutCommand(UUID cartId) {
+        if (cartId == null)
+            throw new CommandValidationException("cartId cannot be null for AddProductCommand.");
         this.cartId = cartId;
     }
 
