@@ -1,5 +1,8 @@
 package com.cbeardsmore.scart.domain.command;
 
+import com.cbeardsmore.scart.domain.exception.CommandValidationException;
+import org.apache.commons.lang3.StringUtils;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -13,6 +16,17 @@ public class AddProductCommand implements Command {
     private final int quantity;
 
     public AddProductCommand(UUID cartId, UUID productId, String name, BigDecimal price, int quantity) {
+        if (cartId == null)
+            throw new CommandValidationException("cartId cannot be null for AddProductCommand.");
+        if (productId == null)
+            throw new CommandValidationException("productId cannot be null for AddProductCommand.");
+        if (StringUtils.isBlank(name))
+            throw new CommandValidationException("name cannot be null for AddProductCommand.");
+        if (price == null || price.compareTo(BigDecimal.ZERO) < 0)
+            throw new CommandValidationException("price must be positive for AddProductCommand.");
+        if (quantity <= 0)
+            throw new CommandValidationException("quantity must be positive for AddProductCommand.");
+
         this.cartId = cartId;
         this.productId = productId;
         this.name = name;
