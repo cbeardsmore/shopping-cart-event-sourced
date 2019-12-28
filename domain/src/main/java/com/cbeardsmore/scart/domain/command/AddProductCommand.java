@@ -20,6 +20,10 @@ public class AddProductCommand implements Command {
         this.quantity = quantity;
     }
 
+    public UUID getCartId() {
+        return cartId;
+    }
+
     @Override
     public String toString() {
         return String.format("AddProductCommand[cartId=%s,productId=%s,name=%s,price=%s,quantity=%d]",

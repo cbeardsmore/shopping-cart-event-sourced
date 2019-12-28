@@ -1,6 +1,7 @@
 package com.cbeardsmore.scart.dataaccess;
 
 import com.cbeardsmore.scart.domain.event.Event;
+import com.cbeardsmore.scart.domain.event.EventType;
 import com.google.gson.Gson;
 
 import java.sql.*;
@@ -35,7 +36,7 @@ final class EventReader {
         while (resultSet.next()) {
             final String eventType = resultSet.getString(1);
             final String payload = resultSet.getString(2);
-            final Class cls = Class.forName(eventType);
+            final Class cls = EventType.valueOf(eventType).getClazz();
             final Event event = (Event)GSON.fromJson(payload, cls);
             output.add(event);
         }

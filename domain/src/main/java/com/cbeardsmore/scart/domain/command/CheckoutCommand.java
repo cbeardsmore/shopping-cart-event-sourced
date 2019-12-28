@@ -11,6 +11,10 @@ public class CheckoutCommand implements Command {
         this.cartId = cartId;
     }
 
+    public UUID getCartId() {
+        return cartId;
+    }
+
     @Override
     public String toString() {
         return String.format("CheckoutCommand[id=%s]", cartId);

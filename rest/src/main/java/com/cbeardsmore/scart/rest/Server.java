@@ -5,6 +5,7 @@ import com.cbeardsmore.scart.domain.command.AddProductCommand;
 import com.cbeardsmore.scart.domain.command.CheckoutCommand;
 import com.cbeardsmore.scart.domain.command.CreateCartCommand;
 import com.cbeardsmore.scart.domain.command.RemoveProductCommand;
+import com.cbeardsmore.scart.domain.model.Receipt;
 import com.cbeardsmore.scart.rest.request.AddProductRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -52,23 +53,23 @@ public class Server {
         exception(RuntimeException.class, (ex, req, res) -> handleUnexpected(ex, res));
     }
 
-    private Object createCart(Request request, Response response) {
+    private Receipt createCart(Request request, Response response) {
         return commandHandler.handle(new CreateCartCommand());
     }
 
-    private Object addItem(Request request, Response response) {
+    private Receipt addItem(Request request, Response response) {
         final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
         final var payload = gson.fromJson(request.body(), AddProductRequest.class);
         final var command = payload.toCommand(cartId);
         return commandHandler.handle(command);
     }
 
-    private Object checkout(Request request, Response response) {
+    private Receipt checkout(Request request, Response response) {
         final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
         return commandHandler.handle(new CheckoutCommand(cartId));
     }
 
-    private Object removeItem(Request request, Response response) {
+    private Receipt removeItem(Request request, Response response) {
         final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
         final var productId = UUID.fromString(request.params(PATH_PARAM_PRODUCT_ID));
         return commandHandler.handle(new RemoveProductCommand(cartId, productId));
