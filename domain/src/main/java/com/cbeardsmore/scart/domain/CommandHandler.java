@@ -22,6 +22,9 @@ public class CommandHandler {
     }
 
     public Object handle(AddProductCommand command) {
+        final Cart cart = repository.load(command.getCartId());
+        cart.addProduct(command);
+        repository.save(cart);
         return null;
     }
 
