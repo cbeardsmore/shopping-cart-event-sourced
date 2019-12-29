@@ -1,6 +1,7 @@
 package com.cbeardsmore.scart.domain.event;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 public final class ProductAddedEvent extends Event {
@@ -31,5 +32,21 @@ public final class ProductAddedEvent extends Event {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductAddedEvent that = (ProductAddedEvent) o;
+        return quantity == that.quantity &&
+                Objects.equals(productId, that.productId) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId, name, price, quantity);
     }
 }
