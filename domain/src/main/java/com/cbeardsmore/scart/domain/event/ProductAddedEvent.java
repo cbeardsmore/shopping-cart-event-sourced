@@ -1,4 +1,52 @@
 package com.cbeardsmore.scart.domain.event;
 
+import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.UUID;
+
 public final class ProductAddedEvent extends Event {
+
+    private final UUID productId;
+    private final String name;
+    private final BigDecimal price;
+    private final int quantity;
+
+    public ProductAddedEvent(UUID productId, String name, BigDecimal price, int quantity) {
+        this.productId = productId;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    public UUID getProductId() {
+        return productId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductAddedEvent that = (ProductAddedEvent) o;
+        return quantity == that.quantity &&
+                Objects.equals(productId, that.productId) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId, name, price, quantity);
+    }
 }

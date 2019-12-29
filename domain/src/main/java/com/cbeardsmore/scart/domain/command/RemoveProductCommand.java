@@ -24,6 +24,10 @@ public class RemoveProductCommand implements Command {
         return cartId;
     }
 
+    public UUID getProductId() {
+        return productId;
+    }
+
     @Override
     public String toString() {
         return String.format("RemoveProductCommand{cartId=%s,productId=%s}", cartId, productId);
