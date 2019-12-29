@@ -38,6 +38,22 @@ public class AddProductCommand implements Command {
         return cartId;
     }
 
+    public UUID getProductId() {
+        return productId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
     @Override
     public String toString() {
         return String.format("AddProductCommand[cartId=%s,productId=%s,name=%s,price=%s,quantity=%d]",

@@ -16,7 +16,7 @@ abstract class AggregateRoot {
     private final List<Event> events = new ArrayList<>();
     private int version;
 
-    protected AggregateRoot(UUID id) {
+    AggregateRoot(UUID id) {
         this.id = id;
     }
 
@@ -32,11 +32,11 @@ abstract class AggregateRoot {
         return version;
     }
 
-    protected <T> void registerHandler(Class<T> payloadType, Consumer<T> handler) {
+    <T> void registerHandler(Class<T> payloadType, Consumer<T> handler) {
         handlerRegistry.put(payloadType, handler);
     }
 
-    protected  void addEvent(Event event) {
+    void addEvent(Event event) {
         events.add(event);
         apply(event);
     }

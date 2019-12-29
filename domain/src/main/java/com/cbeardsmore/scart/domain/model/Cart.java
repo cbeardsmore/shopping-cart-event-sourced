@@ -9,9 +9,16 @@ import com.cbeardsmore.scart.domain.event.CheckoutCompletedEvent;
 import com.cbeardsmore.scart.domain.event.ProductAddedEvent;
 import com.cbeardsmore.scart.domain.event.ProductRemovedEvent;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class Cart extends AggregateRoot {
+
+    private Map<UUID, BigDecimal> productPrices;
+    private BigDecimal price;
+    private boolean orderCompleted;
 
     public Cart(UUID aggregateId) {
         super(aggregateId);
@@ -26,19 +33,42 @@ public class Cart extends AggregateRoot {
     }
 
     public void addProduct(AddProductCommand command) {
-        addEvent(new ProductAddedEvent());
+        final var productAddedEvent = new ProductAddedEvent(
+                command.getProductId(),
+                command.getName(),
+                command.getPrice(),
+                command.getQuantity()
+        );
+        addEvent(productAddedEvent);
     }
 
     public void removeProduct(RemoveProductCommand command) {
-        addEvent(new ProductRemovedEvent());
+        final var productRemovedEvent = new ProductRemovedEvent(command.getProductId());
+        addEvent(productRemovedEvent);
     }
 
     public void checkout(CheckoutCommand command) {
-        addEvent(new CheckoutCompletedEvent());
+        addEvent(new CheckoutCompletedEvent(price));
     }
 
-    private void handle(CartCreatedEvent event) {}
-    private void handle(ProductAddedEvent event) {}
-    private void handle(ProductRemovedEvent event) {}
-    private void handle(CheckoutCompletedEvent event) {}
+    private void handle(CartCreatedEvent event) {
+        productPrices = new HashMap<>();
+        price = BigDecimal.ZERO;
+        orderCompleted = false;
+    }
+
+    private void handle(ProductAddedEvent event) {
+        productPrices.put(event.getProductId(), event.getPrice());
+        final var totalPrice = event.getPrice().multiply(BigDecimal.valueOf(event.getQuantity()));
+        price = price.add(totalPrice);
+    }
+
+    private void handle(ProductRemovedEvent event) {
+        final var productPrice = productPrices.getOrDefault(event.getProductId(), BigDecimal.ZERO);
+        price = price.subtract(productPrice);
+    }
+
+    private void handle(CheckoutCompletedEvent event) {
+        orderCompleted = true;
+    }
 }
