@@ -104,6 +104,14 @@ class ServerTest {
     }
 
     @Test
+    void givenCreateCartRequestWhenIllegalArgumentExceptionIsThrownThenReturn400() throws HttpClientException {
+        final PostMethod post = new PostMethod(BASE_URL + "cart/create", "", false);
+        server.whenNextCommandThrow(new IllegalArgumentException("Illegal argument."));
+        HttpResponse response = httpClient.execute(post);
+        assertEquals(400, response.code());
+    }
+
+    @Test
     void givenCreateCartRequestWhenRuntimeExceptionIsThrownThenReturn500() throws HttpClientException {
         final PostMethod post = new PostMethod(BASE_URL + "cart/create", "", false);
         server.whenNextCommandThrow(new RuntimeException("Something bad happened."));

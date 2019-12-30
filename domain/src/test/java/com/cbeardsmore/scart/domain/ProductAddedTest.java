@@ -2,6 +2,7 @@ package com.cbeardsmore.scart.domain;
 
 import com.cbeardsmore.scart.domain.command.AddProductCommand;
 import com.cbeardsmore.scart.domain.event.CartCreatedEvent;
+import com.cbeardsmore.scart.domain.event.CheckoutCompletedEvent;
 import com.cbeardsmore.scart.domain.event.ProductAddedEvent;
 import com.cbeardsmore.scart.domain.util.TestContext;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,16 @@ class ProductAddedTest {
     void givenNoEventsWhenAddProductCommandShouldThrowIllegalStateException() {
         final var command = new AddProductCommand(CART_ID, PRODUCT_ID, NAME, PRICE, QUANTITY);
         context.givenNoEvents();
+        context.whenCommand(command);
+
+        context.thenAssertException(IllegalStateException.class);
+        context.thenAssertNoOtherEventsAreRaised();
+    }
+
+    @Test
+    void givenCheckoutCompletedEventWhenAddProductCommandShouldThrowIllegalStateException() {
+        final var command = new AddProductCommand(CART_ID, PRODUCT_ID, NAME, PRICE, QUANTITY);
+        context.givenEvent(new CheckoutCompletedEvent(BigDecimal.TEN));
         context.whenCommand(command);
 
         context.thenAssertException(IllegalStateException.class);

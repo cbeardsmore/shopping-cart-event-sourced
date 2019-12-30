@@ -18,6 +18,7 @@ import java.util.UUID;
 public class Cart extends AggregateRoot {
 
     private Map<UUID, BigDecimal> productPrices;
+    private Map<UUID, Integer> productQuantities;
     private BigDecimal price;
     private boolean orderCompleted;
 
@@ -38,6 +39,8 @@ public class Cart extends AggregateRoot {
     public void addProduct(AddProductCommand command) {
         if (this.getVersion() == 0)
             throw new IllegalStateException(String.format("Cart does not exist with id[%s]", command.getCartId()));
+        if (orderCompleted)
+            throw new IllegalStateException(String.format("Cart %s is already checked out", this.getId()));
 
         final var productAddedEvent = new ProductAddedEvent(
                 command.getProductId(),
@@ -51,6 +54,10 @@ public class Cart extends AggregateRoot {
     public void removeProduct(RemoveProductCommand command) {
         if (this.getVersion() == 0)
             throw new IllegalStateException(String.format("Cart does not exist with id[%s]", command.getCartId()));
+        if (orderCompleted)
+            throw new IllegalStateException(String.format("Cart %s is already checked out", this.getId()));
+        if (!productQuantities.containsKey(command.getProductId()))
+            throw new IllegalArgumentException(String.format("Cart %s does not contain product %s", this.getId(), command.getProductId()));
 
         final var productRemovedEvent = new ProductRemovedEvent(command.getProductId());
         addEvent(productRemovedEvent);
@@ -66,18 +73,29 @@ public class Cart extends AggregateRoot {
 
     private void handle(CartCreatedEvent event) {
         productPrices = new HashMap<>();
+        productQuantities = new HashMap<>();
         price = BigDecimal.ZERO;
         orderCompleted = false;
     }
 
     private void handle(ProductAddedEvent event) {
-        productPrices.put(event.getProductId(), event.getPrice());
+        final var productId = event.getProductId();
+        final var existingQuantity = productQuantities.getOrDefault(productId, 0);
         final var totalPrice = event.getPrice().multiply(BigDecimal.valueOf(event.getQuantity()));
+
+        productPrices.put(productId, event.getPrice());
+        productQuantities.put(productId, existingQuantity + event.getQuantity());
         price = price.add(totalPrice);
     }
 
     private void handle(ProductRemovedEvent event) {
-        final var productPrice = productPrices.getOrDefault(event.getProductId(), BigDecimal.ZERO);
+        final var productId = event.getProductId();
+        final var productPrice = productPrices.get(productId);
+        final var existingQuantity = productQuantities.get(productId);
+        productQuantities.put(productId, existingQuantity - 1);
+        if (productQuantities.get(productId) == 0) {
+            productQuantities.remove(productId);
+        }
         price = price.subtract(productPrice);
     }
 
