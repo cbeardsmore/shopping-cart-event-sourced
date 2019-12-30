@@ -12,9 +12,9 @@ public class RemoveProductCommand implements Command {
 
     public RemoveProductCommand(UUID cartId, UUID productId) {
         if (cartId == null)
-            throw new CommandValidationException("cartId cannot be null for AddProductCommand.");
+            throw new CommandValidationException("cartId");
         if (productId == null)
-            throw new CommandValidationException("productId cannot be null for AddProductCommand.");
+            throw new CommandValidationException("productId");
 
         this.cartId = cartId;
         this.productId = productId;

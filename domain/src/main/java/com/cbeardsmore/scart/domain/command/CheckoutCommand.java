@@ -11,7 +11,7 @@ public class CheckoutCommand implements Command {
 
     public CheckoutCommand(UUID cartId) {
         if (cartId == null)
-            throw new CommandValidationException("cartId cannot be null for AddProductCommand.");
+            throw new CommandValidationException("cartId");
         this.cartId = cartId;
     }
 

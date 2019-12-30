@@ -5,6 +5,7 @@ import com.cbeardsmore.scart.domain.command.CheckoutCommand;
 import com.cbeardsmore.scart.domain.command.CreateCartCommand;
 import com.cbeardsmore.scart.domain.command.RemoveProductCommand;
 import com.cbeardsmore.scart.domain.exception.CommandValidationException;
+import com.cbeardsmore.scart.domain.exception.DuplicateTransactionException;
 import com.cbeardsmore.scart.domain.model.Receipt;
 import com.cbeardsmore.scart.rest.request.AddProductRequest;
 import com.google.gson.Gson;
@@ -48,8 +49,10 @@ public class Server {
             delete("/:cartId/product/:productId", JSON_CONTENT, this::removeItem, gson::toJson);
         });
 
-        exception(JsonSyntaxException.class, (ex, req, res) -> handleException(ex, res));
-        exception(CommandValidationException.class, (ex, req, res) -> handleException(ex, res));
+        exception(DuplicateTransactionException.class, (ex, req, res) -> handleDuplicateTransaction(ex, res));
+        exception(IllegalStateException.class, (ex, req, res) -> handleBadRequest(ex, res));
+        exception(JsonSyntaxException.class, (ex, req, res) -> handleBadRequest(ex, res));
+        exception(CommandValidationException.class, (ex, req, res) -> handleBadRequest(ex, res));
         exception(RuntimeException.class, (ex, req, res) -> handleUnexpected(ex, res));
     }
 
@@ -75,14 +78,14 @@ public class Server {
         return commandHandler.handle(new RemoveProductCommand(cartId, productId));
     }
 
-    private void handleException(JsonSyntaxException ex, Response res) {
-        LOGGER.error("JsonSyntaxException caught by server: {}", ex.getMessage());
-        res.body("Bad Request");
-        res.status(400);
+    private void handleDuplicateTransaction(DuplicateTransactionException ex, Response res) {
+        LOGGER.error("DuplicateTransactionException caught by server: {}", ex.getMessage());
+        res.body("Accepted");
+        res.status(202);
     }
 
-    private void handleException(CommandValidationException ex, Response res) {
-        LOGGER.error("CommandValidationException caught by server: {}", ex.getMessage());
+    private void handleBadRequest(RuntimeException ex, Response res) {
+        LOGGER.error("{} caught by server: {}", ex.getClass(), ex.getMessage());
         res.body("Bad Request");
         res.status(400);
     }

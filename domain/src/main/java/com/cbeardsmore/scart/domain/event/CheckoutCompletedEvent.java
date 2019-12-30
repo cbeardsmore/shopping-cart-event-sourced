@@ -1,6 +1,7 @@
 package com.cbeardsmore.scart.domain.event;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public final class CheckoutCompletedEvent extends Event {
 
@@ -12,5 +13,18 @@ public final class CheckoutCompletedEvent extends Event {
 
     public BigDecimal getTotalPrice() {
         return totalPrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CheckoutCompletedEvent that = (CheckoutCompletedEvent) o;
+        return Objects.equals(totalPrice, that.totalPrice);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(totalPrice);
     }
 }

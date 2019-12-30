@@ -19,4 +19,14 @@ class CartCreatedTest {
         context.thenAssertEventAndPayload(event);
         context.thenAssertNoOtherEventsAreRaised();
     }
+
+    @Test
+    void givenCartCreatedEventWhenCreateCartCommandShouldThrowIllegalStateException() {
+        final var command = new CreateCartCommand();
+        context.givenEvent(new CartCreatedEvent());
+        context.whenCommand(command);
+
+        context.thenAssertException(IllegalStateException.class);
+        context.thenAssertNoOtherEventsAreRaised();
+    }
 }
