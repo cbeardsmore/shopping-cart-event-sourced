@@ -27,7 +27,6 @@ class ServerTest {
     private static final UUID PRODUCT_ID = UUID.randomUUID();
     private static final String NAME = "Samsung TV";
     private static final BigDecimal PRICE = BigDecimal.TEN;
-    private static final int QUANTITY = 2;
 
     private static final String BASE_URL = "http://localhost:4567/";
     private static final Gson GSON = new Gson();
@@ -81,8 +80,16 @@ class ServerTest {
 
     @Test
     void givenAddProductRequestWhenCommandValidationExceptionIsThrownThenReturn400() throws HttpClientException {
-        final var addProductRequest = new AddProductRequest(PRODUCT_ID, NAME, PRICE, 0);
-        final PostMethod post = new PostMethod(BASE_URL + "cart/" + CART_ID.toString(), GSON.toJson(addProductRequest), false);
+        final var payload = GSON.toJson(new AddProductRequest(PRODUCT_ID, NAME, PRICE, 0));
+        final PostMethod post = new PostMethod(BASE_URL + "cart/" + CART_ID.toString(), payload, false);
+        HttpResponse response = httpClient.execute(post);
+        assertEquals(400, response.code());
+    }
+
+    @Test
+    void givenCreateCartRequestWhenIllegalStateExceptionIsThrownThenReturn400() throws HttpClientException {
+        final PostMethod post = new PostMethod(BASE_URL + "cart/create", "", false);
+        server.whenNextCommandThrow(new IllegalStateException("Illegal cart state."));
         HttpResponse response = httpClient.execute(post);
         assertEquals(400, response.code());
     }

@@ -29,6 +29,8 @@ public class Cart extends AggregateRoot {
     }
 
     public void createCart(CreateCartCommand command) {
+        if (this.getVersion() > 0)
+            throw new IllegalStateException(String.format("Cart already created with id[%s]", command.getId()));
         addEvent(new CartCreatedEvent());
     }
 

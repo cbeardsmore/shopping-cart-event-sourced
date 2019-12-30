@@ -48,8 +48,9 @@ public class Server {
             delete("/:cartId/product/:productId", JSON_CONTENT, this::removeItem, gson::toJson);
         });
 
-        exception(JsonSyntaxException.class, (ex, req, res) -> handleException(ex, res));
-        exception(CommandValidationException.class, (ex, req, res) -> handleException(ex, res));
+        exception(IllegalStateException.class, (ex, req, res) -> handleBadRequest(ex, res));
+        exception(JsonSyntaxException.class, (ex, req, res) -> handleBadRequest(ex, res));
+        exception(CommandValidationException.class, (ex, req, res) -> handleBadRequest(ex, res));
         exception(RuntimeException.class, (ex, req, res) -> handleUnexpected(ex, res));
     }
 
@@ -75,14 +76,8 @@ public class Server {
         return commandHandler.handle(new RemoveProductCommand(cartId, productId));
     }
 
-    private void handleException(JsonSyntaxException ex, Response res) {
-        LOGGER.error("JsonSyntaxException caught by server: {}", ex.getMessage());
-        res.body("Bad Request");
-        res.status(400);
-    }
-
-    private void handleException(CommandValidationException ex, Response res) {
-        LOGGER.error("CommandValidationException caught by server: {}", ex.getMessage());
+    private void handleBadRequest(RuntimeException ex, Response res) {
+        LOGGER.error("{} caught by server: {}", ex.getClass(), ex.getMessage());
         res.body("Bad Request");
         res.status(400);
     }
