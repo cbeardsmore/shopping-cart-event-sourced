@@ -17,15 +17,15 @@ public class AddProductCommand implements Command {
 
     public AddProductCommand(UUID cartId, UUID productId, String name, BigDecimal price, int quantity) {
         if (cartId == null)
-            throw new CommandValidationException("cartId cannot be null for AddProductCommand.");
+            throw new CommandValidationException("cartId");
         if (productId == null)
-            throw new CommandValidationException("productId cannot be null for AddProductCommand.");
+            throw new CommandValidationException("productId");
         if (StringUtils.isBlank(name))
-            throw new CommandValidationException("name cannot be null for AddProductCommand.");
+            throw new CommandValidationException("name");
         if (price == null || price.compareTo(BigDecimal.ZERO) < 0)
-            throw new CommandValidationException("price must be positive for AddProductCommand.");
+            throw new CommandValidationException("price");
         if (quantity <= 0)
-            throw new CommandValidationException("quantity must be positive for AddProductCommand.");
+            throw new CommandValidationException("quantity");
 
         this.cartId = cartId;
         this.productId = productId;
