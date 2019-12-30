@@ -8,6 +8,7 @@ import com.cbeardsmore.scart.domain.event.CartCreatedEvent;
 import com.cbeardsmore.scart.domain.event.CheckoutCompletedEvent;
 import com.cbeardsmore.scart.domain.event.ProductAddedEvent;
 import com.cbeardsmore.scart.domain.event.ProductRemovedEvent;
+import com.cbeardsmore.scart.domain.exception.DuplicateTransactionException;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -58,7 +59,8 @@ public class Cart extends AggregateRoot {
     public void checkout(CheckoutCommand command) {
         if (this.getVersion() == 0)
             throw new IllegalStateException(String.format("Cart does not exist with id[%s]", command.getCartId()));
-
+        if (orderCompleted)
+            throw new DuplicateTransactionException(String.format("Cart %s is already checked out", this.getId()));
         addEvent(new CheckoutCompletedEvent(price));
     }
 

@@ -5,6 +5,7 @@ import com.cbeardsmore.scart.domain.command.CheckoutCommand;
 import com.cbeardsmore.scart.domain.command.CreateCartCommand;
 import com.cbeardsmore.scart.domain.command.RemoveProductCommand;
 import com.cbeardsmore.scart.domain.exception.CommandValidationException;
+import com.cbeardsmore.scart.domain.exception.DuplicateTransactionException;
 import com.cbeardsmore.scart.domain.model.Receipt;
 import com.cbeardsmore.scart.rest.request.AddProductRequest;
 import com.google.gson.Gson;
@@ -48,6 +49,7 @@ public class Server {
             delete("/:cartId/product/:productId", JSON_CONTENT, this::removeItem, gson::toJson);
         });
 
+        exception(DuplicateTransactionException.class, (ex, req, res) -> handleDuplicateTransaction(ex, res));
         exception(IllegalStateException.class, (ex, req, res) -> handleBadRequest(ex, res));
         exception(JsonSyntaxException.class, (ex, req, res) -> handleBadRequest(ex, res));
         exception(CommandValidationException.class, (ex, req, res) -> handleBadRequest(ex, res));
@@ -74,6 +76,12 @@ public class Server {
         final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
         final var productId = UUID.fromString(request.params(PATH_PARAM_PRODUCT_ID));
         return commandHandler.handle(new RemoveProductCommand(cartId, productId));
+    }
+
+    private void handleDuplicateTransaction(DuplicateTransactionException ex, Response res) {
+        LOGGER.error("DuplicateTransactionException caught by server: {}", ex.getMessage());
+        res.body("Accepted");
+        res.status(202);
     }
 
     private void handleBadRequest(RuntimeException ex, Response res) {

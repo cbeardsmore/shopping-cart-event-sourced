@@ -3,6 +3,7 @@ package com.cbeardsmore.scart.domain;
 import com.cbeardsmore.scart.domain.command.CheckoutCommand;
 import com.cbeardsmore.scart.domain.event.CartCreatedEvent;
 import com.cbeardsmore.scart.domain.event.CheckoutCompletedEvent;
+import com.cbeardsmore.scart.domain.exception.DuplicateTransactionException;
 import com.cbeardsmore.scart.domain.util.TestContext;
 import org.junit.jupiter.api.Test;
 
@@ -33,6 +34,16 @@ class CheckoutCompletedTest {
         context.whenCommand(command);
 
         context.thenAssertException(IllegalStateException.class);
+        context.thenAssertNoOtherEventsAreRaised();
+    }
+
+    @Test
+    void givenCheckoutCompletedEventWhenCheckoutCommandShouldThrowDuplicateTransactionException() {
+        final var command = new CheckoutCommand(CART_ID);
+        context.givenEvent(new CheckoutCompletedEvent(BigDecimal.TEN));
+        context.whenCommand(command);
+
+        context.thenAssertException(DuplicateTransactionException.class);
         context.thenAssertNoOtherEventsAreRaised();
     }
 }

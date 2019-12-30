@@ -1,5 +1,6 @@
 package com.cbeardsmore.scart.rest;
 
+import com.cbeardsmore.scart.domain.exception.DuplicateTransactionException;
 import com.cbeardsmore.scart.rest.request.AddProductRequest;
 import com.cbeardsmore.scart.rest.utils.TestServer;
 import com.despegar.http.client.GetMethod;
@@ -84,6 +85,14 @@ class ServerTest {
         final PostMethod post = new PostMethod(BASE_URL + "cart/" + CART_ID.toString(), payload, false);
         HttpResponse response = httpClient.execute(post);
         assertEquals(400, response.code());
+    }
+
+    @Test
+    void givenCreateCartRequestWhenDuplicateTransactionExceptionIsThrownThenReturn202() throws HttpClientException {
+        final PostMethod post = new PostMethod(BASE_URL + "cart/create", "", false);
+        server.whenNextCommandThrow(new DuplicateTransactionException("Duplicate transaction."));
+        HttpResponse response = httpClient.execute(post);
+        assertEquals(202, response.code());
     }
 
     @Test
