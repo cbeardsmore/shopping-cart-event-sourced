@@ -51,6 +51,7 @@ public class Server {
 
         exception(DuplicateTransactionException.class, (ex, req, res) -> handleDuplicateTransaction(ex, res));
         exception(IllegalStateException.class, (ex, req, res) -> handleBadRequest(ex, res));
+        exception(IllegalArgumentException.class, (ex, req, res) -> handleBadRequest(ex, res));
         exception(JsonSyntaxException.class, (ex, req, res) -> handleBadRequest(ex, res));
         exception(CommandValidationException.class, (ex, req, res) -> handleBadRequest(ex, res));
         exception(RuntimeException.class, (ex, req, res) -> handleUnexpected(ex, res));

@@ -4,7 +4,6 @@ import com.cbeardsmore.scart.domain.command.AddProductCommand;
 import com.cbeardsmore.scart.domain.event.CartCreatedEvent;
 import com.cbeardsmore.scart.domain.event.CheckoutCompletedEvent;
 import com.cbeardsmore.scart.domain.event.ProductAddedEvent;
-import com.cbeardsmore.scart.domain.exception.DuplicateTransactionException;
 import com.cbeardsmore.scart.domain.util.TestContext;
 import org.junit.jupiter.api.Test;
 
