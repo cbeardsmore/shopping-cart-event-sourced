@@ -35,6 +35,9 @@ public class Cart extends AggregateRoot {
     }
 
     public void addProduct(AddProductCommand command) {
+        if (this.getVersion() == 0)
+            throw new IllegalStateException(String.format("Cart does not exist with id[%s]", command.getCartId()));
+
         final var productAddedEvent = new ProductAddedEvent(
                 command.getProductId(),
                 command.getName(),
@@ -45,11 +48,17 @@ public class Cart extends AggregateRoot {
     }
 
     public void removeProduct(RemoveProductCommand command) {
+        if (this.getVersion() == 0)
+            throw new IllegalStateException(String.format("Cart does not exist with id[%s]", command.getCartId()));
+
         final var productRemovedEvent = new ProductRemovedEvent(command.getProductId());
         addEvent(productRemovedEvent);
     }
 
     public void checkout(CheckoutCommand command) {
+        if (this.getVersion() == 0)
+            throw new IllegalStateException(String.format("Cart does not exist with id[%s]", command.getCartId()));
+
         addEvent(new CheckoutCompletedEvent(price));
     }
 
