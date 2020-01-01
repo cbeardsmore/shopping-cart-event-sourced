@@ -2,6 +2,7 @@ package com.cbeardsmore.scart.rest.utils;
 
 import com.cbeardsmore.scart.domain.command.Command;
 import com.cbeardsmore.scart.rest.CommandEndpoints;
+import com.cbeardsmore.scart.rest.QueryEndpoints;
 import com.cbeardsmore.scart.rest.Server;
 import spark.servlet.SparkApplication;
 
@@ -17,8 +18,9 @@ public class TestServer implements SparkApplication {
     @Override
     public void init() {
         commandHandler = new CommandHandlerStub();
-        final CommandEndpoints commandEndpoints = new CommandEndpoints(commandHandler);
-        final Server server = new Server(commandEndpoints);
+        final var commandEndpoints = new CommandEndpoints(commandHandler);
+        final var queryEndpoints = new QueryEndpoints();
+        final var server = new Server(commandEndpoints, queryEndpoints);
 
         while (true) {
             try {

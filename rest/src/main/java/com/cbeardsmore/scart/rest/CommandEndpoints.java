@@ -4,14 +4,9 @@ import com.cbeardsmore.scart.domain.CommandHandler;
 import com.cbeardsmore.scart.domain.command.CheckoutCommand;
 import com.cbeardsmore.scart.domain.command.CreateCartCommand;
 import com.cbeardsmore.scart.domain.command.RemoveProductCommand;
-import com.cbeardsmore.scart.domain.exception.CommandValidationException;
-import com.cbeardsmore.scart.domain.exception.DuplicateTransactionException;
 import com.cbeardsmore.scart.domain.model.Receipt;
 import com.cbeardsmore.scart.rest.request.AddProductRequest;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 
@@ -20,8 +15,6 @@ import java.util.UUID;
 import static spark.Spark.*;
 
 public class CommandEndpoints {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommandEndpoints.class);
 
     private static final String JSON_CONTENT = "application/json";
     private static final String PATH_PARAM_CART_ID = "cartId";
@@ -42,12 +35,6 @@ public class CommandEndpoints {
             post("/:cartId/checkout", JSON_CONTENT, this::checkout, gson::toJson);
             delete("/:cartId/product/:productId", JSON_CONTENT, this::removeItem, gson::toJson);
         });
-
-        exception(DuplicateTransactionException.class, (ex, req, res) -> handleDuplicateTransaction(ex, res));
-        exception(IllegalStateException.class, (ex, req, res) -> handleBadRequest(ex, res));
-        exception(IllegalArgumentException.class, (ex, req, res) -> handleBadRequest(ex, res));
-        exception(JsonSyntaxException.class, (ex, req, res) -> handleBadRequest(ex, res));
-        exception(CommandValidationException.class, (ex, req, res) -> handleBadRequest(ex, res));
     }
 
     private Receipt createCart(Request request, Response response) {
@@ -70,17 +57,5 @@ public class CommandEndpoints {
         final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
         final var productId = UUID.fromString(request.params(PATH_PARAM_PRODUCT_ID));
         return commandHandler.handle(new RemoveProductCommand(cartId, productId));
-    }
-
-    private void handleDuplicateTransaction(DuplicateTransactionException ex, Response res) {
-        LOGGER.error("DuplicateTransactionException caught by server: {}", ex.getMessage());
-        res.body("Accepted");
-        res.status(202);
-    }
-
-    private void handleBadRequest(RuntimeException ex, Response res) {
-        LOGGER.error("{} caught by server: {}", ex.getClass(), ex.getMessage());
-        res.body("Bad Request");
-        res.status(400);
     }
 }
