@@ -4,6 +4,7 @@ import com.cbeardsmore.scart.domain.command.AddProductCommand;
 import com.cbeardsmore.scart.domain.command.CheckoutCommand;
 import com.cbeardsmore.scart.domain.command.CreateCartCommand;
 import com.cbeardsmore.scart.domain.command.RemoveProductCommand;
+import com.cbeardsmore.scart.domain.exception.DuplicateTransactionException;
 import com.cbeardsmore.scart.rest.request.AddProductRequest;
 import com.cbeardsmore.scart.rest.utils.TestServer;
 import com.despegar.http.client.DeleteMethod;
@@ -21,7 +22,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class CartEndpointsTest {
+class CommandEndpointsTest {
 
     private static final UUID CART_ID = UUID.randomUUID();
     private static final UUID PRODUCT_ID = UUID.randomUUID();
@@ -91,5 +92,53 @@ class CartEndpointsTest {
         final var actualCommand = server.getLastCommand();
         assertEquals(expectedCommand, actualCommand);
         assertEquals(200, response.code());
+    }
+
+
+    @Test
+    void givenAddProductRequestWhenJsonSyntaxExceptionIsThrownThenReturn400() throws HttpClientException {
+        final PostMethod post = new PostMethod(BASE_URL + CART_ID.toString(), "bad-payload", false);
+        HttpResponse response = httpClient.execute(post);
+        assertEquals(400, response.code());
+    }
+
+    @Test
+    void givenAddProductRequestWhenCommandValidationExceptionIsThrownThenReturn400() throws HttpClientException {
+        final var payload = GSON.toJson(new AddProductRequest(PRODUCT_ID, NAME, PRICE, 0));
+        final PostMethod post = new PostMethod(BASE_URL + CART_ID.toString(), payload, false);
+        HttpResponse response = httpClient.execute(post);
+        assertEquals(400, response.code());
+    }
+
+    @Test
+    void givenCreateCartRequestWhenDuplicateTransactionExceptionIsThrownThenReturn202() throws HttpClientException {
+        final PostMethod post = new PostMethod(BASE_URL + "create", "", false);
+        server.whenNextCommandThrow(new DuplicateTransactionException("Duplicate transaction."));
+        HttpResponse response = httpClient.execute(post);
+        assertEquals(202, response.code());
+    }
+
+    @Test
+    void givenCreateCartRequestWhenIllegalStateExceptionIsThrownThenReturn400() throws HttpClientException {
+        final PostMethod post = new PostMethod(BASE_URL + "create", "", false);
+        server.whenNextCommandThrow(new IllegalStateException("Illegal cart state."));
+        HttpResponse response = httpClient.execute(post);
+        assertEquals(400, response.code());
+    }
+
+    @Test
+    void givenCreateCartRequestWhenIllegalArgumentExceptionIsThrownThenReturn400() throws HttpClientException {
+        final PostMethod post = new PostMethod(BASE_URL + "create", "", false);
+        server.whenNextCommandThrow(new IllegalArgumentException("Illegal argument."));
+        HttpResponse response = httpClient.execute(post);
+        assertEquals(400, response.code());
+    }
+
+    @Test
+    void givenCreateCartRequestWhenRuntimeExceptionIsThrownThenReturn500() throws HttpClientException {
+        final PostMethod post = new PostMethod(BASE_URL + "create", "", false);
+        server.whenNextCommandThrow(new RuntimeException("Something bad happened."));
+        HttpResponse response = httpClient.execute(post);
+        assertEquals(500, response.code());
     }
 }
