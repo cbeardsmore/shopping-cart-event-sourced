@@ -12,6 +12,16 @@ services:
     environment:
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: supersecret
+  read_model_popular:
+    container_name: read_model_populator
+    build:
+      context: .
+      dockerfile: ./docker/rmp.dockerfile
+    depends_on:
+      - spark_server
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: supersecret
   postgres_db:
     container_name: postgres_db
     build:
