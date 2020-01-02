@@ -1,6 +1,7 @@
 package com.cbeardsmore.scart;
 
 import com.cbeardsmore.scart.dataaccess.PostgresRepository;
+import com.cbeardsmore.scart.dataaccess.ReadModelStore;
 import com.cbeardsmore.scart.domain.CommandHandler;
 import com.cbeardsmore.scart.rest.CommandEndpoints;
 import com.cbeardsmore.scart.rest.QueryEndpoints;
@@ -15,9 +16,10 @@ public class App {
     public static void main(String[] args) {
         LOGGER.info("Starting Shopping Cart Server...");
         final var repository = new PostgresRepository("jdbc:postgresql://postgres_db:5432/shopping_cart?user=postgres&password=supersecret");
+        final var readModelStore = new ReadModelStore("jdbc:postgresql://postgres_db:5432/shopping_cart?user=postgres&password=supersecret");
         final var commandHandler = new CommandHandler(repository);
         final var commandEndpoints = new CommandEndpoints(commandHandler);
-        final var queryEndpoints = new QueryEndpoints();
+        final var queryEndpoints = new QueryEndpoints(readModelStore);
         final var server = new Server(commandEndpoints, queryEndpoints);
         server.serve(8080);
     }
