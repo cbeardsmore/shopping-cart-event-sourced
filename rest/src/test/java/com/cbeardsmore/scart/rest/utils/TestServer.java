@@ -18,8 +18,9 @@ public class TestServer implements SparkApplication {
     @Override
     public void init() {
         commandHandler = new CommandHandlerStub();
+        final var store = new ReadModelStoreStub();
         final var commandEndpoints = new CommandEndpoints(commandHandler);
-        final var queryEndpoints = new QueryEndpoints();
+        final var queryEndpoints = new QueryEndpoints(store);
         final var server = new Server(commandEndpoints, queryEndpoints);
 
         while (true) {
