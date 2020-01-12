@@ -1,10 +1,17 @@
 package com.cbeardsmore.scart.rmp;
 
-import com.cbeardsmore.scart.domain.event.Event;
+import com.cbeardsmore.scart.rmp.persistence.Bookmark;
+import com.cbeardsmore.scart.rmp.persistence.EventEnvelope;
 
 public class ReadModelPopulator {
 
-    public ReadModelPopulator() {}
+    private final Bookmark bookmark;
 
-    public void dispatch(Event event) {}
+    public ReadModelPopulator(Bookmark bookmark) {
+        this.bookmark = bookmark;
+    }
+
+    public void dispatch(EventEnvelope envelope) {
+        bookmark.put(envelope.getPosition());
+    }
 }

@@ -1,6 +1,5 @@
 package com.cbeardsmore.scart.rmp.persistence;
 
-import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import javax.sql.DataSource;
@@ -30,9 +29,11 @@ public class Bookmark {
         }
     }
 
-    void put(Connection connection, long position) {
-        try (final var query = connection.createQuery(UPSERT_BOOKMARK)) {
-            query.addParameter("position", position).executeUpdate();
+    public void put(long position) {
+        try (final var connection = sql2o.open()) {
+            try (var query = connection.createQuery(UPSERT_BOOKMARK)) {
+                query.addParameter("position", position).executeUpdate();
+            }
         }
     }
 }
