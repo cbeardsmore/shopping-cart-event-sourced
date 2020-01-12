@@ -12,7 +12,7 @@ services:
     environment:
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: supersecret
-  read_model_popular:
+  read_model_populator:
     container_name: read_model_populator
     build:
       context: .

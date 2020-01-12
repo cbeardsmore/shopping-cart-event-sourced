@@ -1,6 +1,6 @@
 CREATE TABLE shopping_cart.total_price (
     id BIGSERIAL PRIMARY KEY,
-    totalPrice BIGINT NOT NULL,
+    totalPrice BIGINT NOT NULL
 );
 
 CREATE TABLE shopping_cart.cart_price (
