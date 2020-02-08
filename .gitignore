@@ -41,3 +41,9 @@ hs_err_pid*
 .gradle/
 build/
 bin/
+
+# Eclipse Core      
+.project
+
+# JDT-specific (Eclipse Java Development Tools)     
+.classpath

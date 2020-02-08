@@ -2,7 +2,38 @@
 
 ![GitHub](https://img.shields.io/github/license/cbeardsmore/scart?style=plastic)
 
-A shopping cart system in Java11 implementing Event Sourcing (ES) and Command Query Responsibility Segregation (CQRS)
+<img src="./logo.png" height="100">
+
+A shopping cart system in Java 11 and PostgreSQL implementing [Event Sourcing (ES)](https://martinfowler.com/eaaDev/EventSourcing.html) and [Command Query Responsibility Segregation (CQRS)](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs).
+The system follows a [Hex Arch pattern](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)) to create loosely coupled components, isolate the core domain logic and facilitate test automation.
+
+## Build and Run
+
+### Gradle
+
+- To build via gradle:
+
+    `gradle clean build`
+
+### Docker
+
+- To build:
+
+    `docker-compose build`
+
+- To run:
+
+    `docker-compose up --build`
+
+
+- To test via Postman while running:
+
+	```sh
+	npm install -g newman
+	./postman/test.sh
+	```
+
+## API
 
 ### Command Endpoints
 
@@ -12,7 +43,7 @@ A shopping cart system in Java11 implementing Event Sourcing (ES) and Command Qu
 POST /cart/create
 RESPONSE:
 {
-	"aggregateId": "UUID"
+  "aggregateId": "UUID"
 }
 ```
 
@@ -22,10 +53,10 @@ RESPONSE:
 POST /cart/{cartId}
 REQUEST: 
 {
-	"productId": "UUID",
-	"name": "Samsung TV",
-	"price": 49.99,
-	"quantity: 2
+  "productId": "UUID",
+  "name": "Samsung TV",
+  "price": 49.99,
+  "quantity: 2
 }
 ```
 
@@ -41,7 +72,7 @@ DELETE /cart/{cartId}/product/{productId}
 POST /cart/{cartId}/checkout
 RESPONSE:
 {
-	"totalPrice": 199.97
+  "totalPrice": 199.97
 }
 ```
 
@@ -53,7 +84,7 @@ RESPONSE:
 GET /carts/total
 RESPONSE:
 {
-	"totalPrice": 199.97
+  "totalPrice": 199.97
 }
 ```
 
@@ -63,7 +94,7 @@ RESPONSE:
 GET /cart/{cartId}
 RESPONSE:
 {
-	"totalPrice": 199.97
+  "totalPrice": 199.97
 }
 ```
 
@@ -73,35 +104,11 @@ RESPONSE:
 GET /product/popular
 RESPONSE:
 {
-	"popularProducts": [
-		{
-			"productId": "UUID"
-			"quantity": 430
-		}
-	]
+  "popularProducts": [
+    {
+      "productId": "UUID"
+      "quantity": 430
+    }
+  ]
 }
 ```
-
-### Docker
-
-- To build:
-
-`docker-compose build`
-
-- To run:
-
-`docker-compose up --build`
-
-
-- To test via Postman while running:
-
-```
-npm install -g newman
-./postman/test.sh
-```
-
-### Gradle
-
-- To build via gradle:
-
-`gradle clean build`
