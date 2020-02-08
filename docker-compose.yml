@@ -10,6 +10,7 @@ services:
     depends_on:
       - postgres_db
     environment:
+      POSTGRES_DATABASE: shopping_cart
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: supersecret
   read_model_populator:
@@ -20,6 +21,7 @@ services:
     depends_on:
       - spark_server
     environment:
+      POSTGRES_DATABASE: shopping_cart
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: supersecret
   postgres_db:

@@ -11,10 +11,7 @@ import java.util.List;
 final class EventAppender {
 
     private static final String INSERT_SQL =
-            "INSERT INTO event_store.events "
-                    + "(stream_type, stream_id, version, event_type, payload) "
-                    + "VALUES "
-                    + "(?, ?, ?, ?, ?)";
+        "INSERT INTO event_store.events (stream_type, stream_id, version, event_type, payload) VALUES (?, ?, ?, ?, ?)";
 
     private static final Gson GSON = new Gson();
 

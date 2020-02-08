@@ -7,6 +7,8 @@ import com.cbeardsmore.scart.domain.command.RemoveProductCommand;
 import com.cbeardsmore.scart.domain.model.Receipt;
 import com.cbeardsmore.scart.rest.request.AddProductRequest;
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 
@@ -19,6 +21,8 @@ public class CommandEndpoints {
     private static final String JSON_CONTENT = "application/json";
     private static final String PATH_PARAM_CART_ID = "cartId";
     private static final String PATH_PARAM_PRODUCT_ID = "productId";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandEndpoints.class);
 
     private final CommandHandler commandHandler;
     private final Gson gson;
@@ -45,17 +49,22 @@ public class CommandEndpoints {
         final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
         final var payload = gson.fromJson(request.body(), AddProductRequest.class);
         final var command = payload.toCommand(cartId);
+        LOGGER.info("Item Added: {}", command);
         return commandHandler.handle(command);
     }
 
     private Receipt checkout(Request request, Response response) {
         final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
-        return commandHandler.handle(new CheckoutCommand(cartId));
+        final var command = new CheckoutCommand(cartId);
+        LOGGER.info("Checkout: {}", command);
+        return commandHandler.handle(command);
     }
 
     private Receipt removeItem(Request request, Response response) {
         final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
         final var productId = UUID.fromString(request.params(PATH_PARAM_PRODUCT_ID));
-        return commandHandler.handle(new RemoveProductCommand(cartId, productId));
+        final var command = new RemoveProductCommand(cartId, productId);
+        LOGGER.info("Item Removed: {}", command);
+        return commandHandler.handle(command);
     }
 }
