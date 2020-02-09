@@ -5,13 +5,15 @@ import com.cbeardsmore.scart.domain.event.EventType;
 import com.google.gson.Gson;
 import org.postgresql.util.PGobject;
 
-import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 final class EventAppender {
 
     private static final String INSERT_SQL =
-        "INSERT INTO event_store.events (stream_type, stream_id, version, event_type, payload) VALUES (?, ?, ?, ?, ?)";
+            "INSERT INTO event_store.events (stream_type, stream_id, version, event_type, payload) VALUES (?, ?, ?, ?, ?)";
 
     private static final Gson GSON = new Gson();
 
@@ -21,10 +23,10 @@ final class EventAppender {
         this.connectionUrl = connectionUrl;
     }
 
-    public void append(String streamType, String streamId, int expectedVersion, List<Event> events) throws SQLException {
+    public void append(String streamType, String streamId, int expectedVersion, List<Event> events) {
         int version = expectedVersion + 1;
 
-        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+        try (final var conn = DriverManager.getConnection(connectionUrl)) {
             conn.setAutoCommit(false);
             for (var event : events) {
                 final PreparedStatement statement = conn.prepareStatement(INSERT_SQL);
@@ -38,6 +40,8 @@ final class EventAppender {
                 version++;
             }
             conn.commit();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
     }
 

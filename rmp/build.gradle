@@ -1,7 +1,6 @@
 dependencies {
     compile 'org.slf4j:slf4j-simple:1.7.27'
     compile 'com.google.code.gson:gson:2.8.5'
-    compile 'org.sql2o:sql2o:1.6.0'
     compile 'org.postgresql:postgresql:42.2.2'
     compile project(':domain')
 }
