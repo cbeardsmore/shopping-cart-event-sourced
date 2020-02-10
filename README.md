@@ -7,7 +7,9 @@
 A shopping cart system in Java 11 and PostgreSQL implementing [Event Sourcing (ES)](https://martinfowler.com/eaaDev/EventSourcing.html) and [Command Query Responsibility Segregation (CQRS)](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs).
 The system follows a [Hex Arch pattern](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)) to create loosely coupled components, isolate the core domain logic and facilitate test automation.
 
-![Arch Diagram](./images/arch.png)
+<p align="center">
+  <img src="./images/arch.png">
+</p>
 
 ## Build and Run
 
