@@ -6,12 +6,10 @@ import java.sql.SQLException;
 public class Bookmark {
 
     private static final String SELECT_BOOKMARK =
-            "SELECT COALESCE(MAX(position), 0) FROM shopping_cart.bookmark "
-                    + "WHERE rmp = 'shopping-cart-rmp'";
+            "SELECT COALESCE(MAX(position), 0) FROM shopping_cart.bookmark WHERE rmp = 'shopping-cart-rmp'";
 
     private static final String UPSERT_BOOKMARK =
-            "INSERT INTO shopping_cart.bookmark (rmp, position) "
-                    + "VALUES ('shopping-cart-rmp', ?) "
+            "INSERT INTO shopping_cart.bookmark (rmp, position) VALUES ('shopping-cart-rmp', ?) "
                     + "ON CONFLICT (rmp) DO UPDATE SET position = ?";
 
     private final String connectionUrl;
@@ -34,14 +32,13 @@ public class Bookmark {
     }
 
     public void put(long position) {
-        System.out.println("Bookmark is: " + position);
         try (final var connection = DriverManager.getConnection(connectionUrl)) {
             try (final var statement = connection.prepareStatement(UPSERT_BOOKMARK)) {
                 statement.setLong(1, position);
                 statement.setLong(2, position);
                 statement.executeUpdate();
             }
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }
