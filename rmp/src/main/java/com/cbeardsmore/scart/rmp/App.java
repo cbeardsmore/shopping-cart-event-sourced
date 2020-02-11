@@ -3,6 +3,7 @@ package com.cbeardsmore.scart.rmp;
 import com.cbeardsmore.scart.rmp.persistence.Bookmark;
 import com.cbeardsmore.scart.rmp.persistence.EventEnvelope;
 import com.cbeardsmore.scart.rmp.persistence.EventReader;
+import com.cbeardsmore.scart.rmp.persistence.PostgresRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,8 @@ public class App {
         LOGGER.info("Starting shopping-cart-rmp...");
         final var connectionUrl = getPostgresConnectionString();
         final var bookmark = new Bookmark(connectionUrl);
-        final var populator = new ReadModelPopulator(bookmark);
+        final var repository = new PostgresRepository(connectionUrl);
+        final var populator = new ReadModelPopulator(bookmark, repository);
         final var reader = new EventReader(connectionUrl);
 
         try {
