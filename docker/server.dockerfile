@@ -1,6 +1,6 @@
 FROM gradle:jdk11 as builder
-USER root
-COPY . ./
+COPY --chown=gradle:gradle . /home/gradle/
+USER gradle
 RUN gradle build
 
 FROM adoptopenjdk/openjdk11:jre-11.0.2.9-alpine as runtime

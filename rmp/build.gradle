@@ -10,6 +10,10 @@ dependencies {
     compile project(':app')
 }
 
+test {
+    testLogging.showStandardStreams = true
+}
+
 jar {
     manifest {
         attributes 'Main-Class': 'com.cbeardsmore.scart.rmp.App'
