@@ -8,7 +8,8 @@ import java.sql.SQLException;
 public final class PostgresRepository {
 
     private static final String INSERT_CART_PRICE_PROJECTION =
-            "INSERT INTO shopping_cart.cart_price (cartId, price) VALUES (?, ?);";
+            "INSERT INTO shopping_cart.cart_price (cartId, price) VALUES (?, ?) "
+                    + "ON CONFLICT (cartId) DO UPDATE SET price = cart_price.price + ?";
 
     private final String connectionUrl;
 
@@ -21,6 +22,7 @@ public final class PostgresRepository {
             try (final var statement = connection.prepareStatement(INSERT_CART_PRICE_PROJECTION)) {
                 statement.setObject(1, projection.getCartId());
                 statement.setLong(2, projection.getPrice());
+                statement.setLong(3, projection.getPrice());
                 statement.executeUpdate();
             }
         } catch (SQLException ex) {
