@@ -14,7 +14,7 @@ import java.util.List;
 
 public class EventReader {
     private static final String SELECT_ALL =
-            "SELECT event_type, payload, position FROM event_store.events WHERE position > ? LIMIT 20";
+            "SELECT stream_id, event_type, payload, position FROM event_store.events WHERE position > ? LIMIT 20";
 
     private static final Gson GSON = new Gson();
     private final String connectionUrl;
@@ -37,12 +37,13 @@ public class EventReader {
     private List<EventEnvelope> mapToEvents(ResultSet resultSet) throws SQLException, ClassNotFoundException {
         final List<EventEnvelope> output = new ArrayList<>();
         while (resultSet.next()) {
-            final String eventType = resultSet.getString(1);
-            final String payload = resultSet.getString(2);
-            final long position = resultSet.getLong(3);
+            final String streamId = resultSet.getString(1);
+            final String eventType = resultSet.getString(2);
+            final String payload = resultSet.getString(3);
+            final long position = resultSet.getLong(4);
             final Class cls = EventType.valueOf(eventType).getClazz();
             final Event event = (Event)GSON.fromJson(payload, cls);
-            output.add(new EventEnvelope(position, event));
+            output.add(new EventEnvelope(streamId, eventType, position, event));
         }
         return output;
     }
