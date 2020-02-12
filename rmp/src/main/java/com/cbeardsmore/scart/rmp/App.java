@@ -21,8 +21,8 @@ public class App {
         LOGGER.info("Starting shopping-cart-rmp...");
         final var connectionUrl = getPostgresConnectionString();
         final var bookmark = new Bookmark(connectionUrl);
-        final var repository = new PostgresRepository(connectionUrl);
-        final var populator = new ReadModelPopulator(bookmark, repository);
+        final var repository = new PostgresRepository(bookmark, connectionUrl);
+        final var populator = new ReadModelPopulator(repository);
         final var reader = new EventReader(connectionUrl);
 
         try {

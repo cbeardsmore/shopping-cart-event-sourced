@@ -17,15 +17,37 @@ public final class PostgresRepository {
             "INSERT INTO shopping_cart.popular_products (productId, count) VALUES (?, ?) "
                     + "ON CONFLICT (productId) DO UPDATE SET count = popular_products.count + ?";
 
+    private static final String UPDATE_TOTAL_PRICE =
+            "INSERT INTO shopping_cart.total_price (store, totalPrice) VALUES ('Store', ?)"
+                    + "ON CONFLICT (store) DO UPDATE SET totalPrice = total_price.totalPrice + ?";
+
+    private final Bookmark bookmark;
     private final String connectionUrl;
 
-    public PostgresRepository(String connectionUrl) {
+    public PostgresRepository(Bookmark bookmark, String connectionUrl) {
+        this.bookmark = bookmark;
         this.connectionUrl = connectionUrl;
     }
 
-    public void put(CartPriceProjection projection) {
+    public void put(CartPriceProjection projection, long position) {
         try (final var connection = DriverManager.getConnection(connectionUrl)) {
+            connection.setAutoCommit(false);
             putCartPriceProjection(connection, projection);
+            bookmark.put(connection, position);
+            connection.commit();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public void put(CartPriceProjection cartPriceProjection, PopularProductsProjection productsProjection, long position) {
+        try (final var connection = DriverManager.getConnection(connectionUrl)) {
+            connection.setAutoCommit(false);
+            putCartPriceProjection(connection, cartPriceProjection);
+            putPopularProductsProjection(connection, productsProjection);
+            updateTotalPrice(connection, cartPriceProjection.getPrice());
+            bookmark.put(connection, position);
+            connection.commit();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -45,6 +67,14 @@ public final class PostgresRepository {
             statement.setObject(1, projection.getProductId());
             statement.setLong(2, projection.getCount());
             statement.setLong(3, projection.getCount());
+            statement.executeUpdate();
+        }
+    }
+
+    private void updateTotalPrice(Connection connection, long price) throws SQLException {
+        try (final var statement = connection.prepareStatement(UPDATE_TOTAL_PRICE)) {
+            statement.setLong(1, price);
+            statement.setLong(2, price);
             statement.executeUpdate();
         }
     }

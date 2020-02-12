@@ -1,5 +1,6 @@
 package com.cbeardsmore.scart.rmp.persistence;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -33,13 +34,17 @@ public class Bookmark {
 
     public void put(long position) {
         try (final var connection = DriverManager.getConnection(connectionUrl)) {
-            try (final var statement = connection.prepareStatement(UPSERT_BOOKMARK)) {
-                statement.setLong(1, position);
-                statement.setLong(2, position);
-                statement.executeUpdate();
-            }
+            put(connection, position);
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    public void put(Connection connection, long position) throws SQLException {
+        try (final var statement = connection.prepareStatement(UPSERT_BOOKMARK)) {
+            statement.setLong(1, position);
+            statement.setLong(2, position);
+            statement.executeUpdate();
         }
     }
 }

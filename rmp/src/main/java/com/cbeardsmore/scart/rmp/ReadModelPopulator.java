@@ -2,10 +2,10 @@ package com.cbeardsmore.scart.rmp;
 
 import com.cbeardsmore.scart.domain.event.ProductAddedEvent;
 import com.cbeardsmore.scart.domain.event.ProductRemovedEvent;
-import com.cbeardsmore.scart.rmp.persistence.Bookmark;
 import com.cbeardsmore.scart.rmp.persistence.EventEnvelope;
 import com.cbeardsmore.scart.rmp.persistence.PostgresRepository;
 import com.cbeardsmore.scart.rmp.projection.CartPriceProjection;
+import com.cbeardsmore.scart.rmp.projection.PopularProductsProjection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,13 +14,11 @@ import java.util.function.Consumer;
 
 public class ReadModelPopulator {
 
-    private final Bookmark bookmark;
     private final PostgresRepository repository;
     private final Map<String, Consumer<EventEnvelope>> handlers;
     private final Map<UUID, Long> productPrices;
 
-    public ReadModelPopulator(Bookmark bookmark, PostgresRepository repository) {
-        this.bookmark = bookmark;
+    public ReadModelPopulator(PostgresRepository repository) {
         this.repository = repository;
         handlers = new HashMap<>();
         productPrices = new HashMap<>();
@@ -37,26 +35,25 @@ public class ReadModelPopulator {
     private void cartCreated(EventEnvelope envelope) {
         final var cartId = UUID.fromString(envelope.getStreamId());
         final var projection = new CartPriceProjection(cartId, 0L);
-        repository.put(projection);
-        bookmark.put(envelope.getPosition());
+        repository.put(projection, envelope.getPosition());
     }
 
     private void productAdded(EventEnvelope envelope) {
         final var event = (ProductAddedEvent)envelope.getEvent();
         final var cartId = UUID.fromString(envelope.getStreamId());
         final var price = event.getPrice().longValue();
-        final var projection = new CartPriceProjection(cartId, price);
+        final var cartProjection = new CartPriceProjection(cartId, price);
+        final var productProjection = new PopularProductsProjection(event.getProductId(), 1);
         productPrices.put(event.getProductId(), price);
-        repository.put(projection);
-        bookmark.put(envelope.getPosition());
+        repository.put(cartProjection, productProjection, envelope.getPosition());
     }
 
     private void productRemoved(EventEnvelope envelope) {
         final var event = (ProductRemovedEvent)envelope.getEvent();
         final var cartId = UUID.fromString(envelope.getStreamId());
         final var price = -productPrices.get(event.getProductId());
-        final var projection = new CartPriceProjection(cartId, price);
-        repository.put(projection);
-        bookmark.put(envelope.getPosition());
+        final var cartProjection = new CartPriceProjection(cartId, price);
+        final var productProjection = new PopularProductsProjection(event.getProductId(), -1);
+        repository.put(cartProjection, productProjection, envelope.getPosition());
     }
 }
