@@ -11,7 +11,7 @@ import java.util.UUID;
 public class ReadModelStore {
 
     private static final String SELECT_TOTAL_PRICE =
-            "SELECT totalPrice FROM shopping_cart.total_price WHERE store = 'store'";
+            "SELECT totalPrice FROM shopping_cart.total_price WHERE store = 'Store'";
 
     private static final String SELECT_CART_PRICE =
             "SELECT price FROM shopping_cart.cart_price WHERE cartId = ?";
