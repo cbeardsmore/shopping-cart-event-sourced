@@ -1,13 +1,22 @@
 package com.cbeardsmore.scart.rest.response;
 
+import com.cbeardsmore.scart.domain.model.PopularProduct;
+
+import java.util.List;
 import java.util.Objects;
 
 public class PopularProductsResponse {
+    private final List<PopularProduct> popularProducts;
 
-    private final String popular;
+    public PopularProductsResponse(List<PopularProduct> popularProducts) {
+        this.popularProducts = popularProducts;
+    }
 
-    public PopularProductsResponse(String popular) {
-        this.popular = popular;
+    @Override
+    public String toString() {
+        return "PopularProductsResponse{" +
+                "popularProducts=" + popularProducts +
+                '}';
     }
 
     @Override
@@ -15,11 +24,11 @@ public class PopularProductsResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PopularProductsResponse that = (PopularProductsResponse) o;
-        return Objects.equals(popular, that.popular);
+        return Objects.equals(popularProducts, that.popularProducts);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(popular);
+        return Objects.hash(popularProducts);
     }
 }

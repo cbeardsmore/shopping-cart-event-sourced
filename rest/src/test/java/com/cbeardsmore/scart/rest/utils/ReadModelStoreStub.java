@@ -1,35 +1,32 @@
 package com.cbeardsmore.scart.rest.utils;
 
 import com.cbeardsmore.scart.dataaccess.ReadModelStore;
-import com.cbeardsmore.scart.domain.CommandHandler;
-import com.cbeardsmore.scart.domain.command.AddProductCommand;
-import com.cbeardsmore.scart.domain.command.CheckoutCommand;
-import com.cbeardsmore.scart.domain.command.Command;
-import com.cbeardsmore.scart.domain.command.CreateCartCommand;
-import com.cbeardsmore.scart.domain.command.RemoveProductCommand;
-import com.cbeardsmore.scart.domain.model.Receipt;
+import com.cbeardsmore.scart.domain.model.PopularProduct;
 
-import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class ReadModelStoreStub extends ReadModelStore {
+
+    public static final UUID PRODUCT_ID = UUID.randomUUID();
 
     ReadModelStoreStub() {
         super(null);
     }
 
     @Override
-    public BigDecimal getCartPrice(UUID cartId) {
-        return BigDecimal.ZERO;
+    public long getCartPrice(UUID cartId) {
+        return 0L;
     }
 
     @Override
-    public BigDecimal getTotalCartsPrice() {
-        return BigDecimal.ZERO;
+    public long getTotalCartsPrice() {
+        return 0L;
     }
 
     @Override
-    public String getPopularProducts() {
-        return null;
+    public List<PopularProduct> getPopularProducts() {
+        return Collections.singletonList(new PopularProduct(PRODUCT_ID, 1));
     }
 }

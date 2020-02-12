@@ -1,13 +1,12 @@
 package com.cbeardsmore.scart.rest.response;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class PriceResponse {
 
-    private final BigDecimal price;
+    private final long price;
 
-    public PriceResponse(BigDecimal price) {
+    public PriceResponse(long price) {
         this.price = price;
     }
 
@@ -16,7 +15,7 @@ public class PriceResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PriceResponse that = (PriceResponse) o;
-        return Objects.equals(price, that.price);
+        return price == that.price;
     }
 
     @Override
