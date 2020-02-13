@@ -362,6 +362,18 @@
 						],
 						"type": "text/javascript"
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2104a451-6d3f-4ec8-bad7-9325c35a104e",
+						"exec": [
+							"// Allow RMP to catch up. Eventual Consistency.",
+							"setTimeout(() => {}, 400); ",
+							""
+						],
+						"type": "text/javascript"
+					}
 				}
 			],
 			"protocolProfileBehavior": {
