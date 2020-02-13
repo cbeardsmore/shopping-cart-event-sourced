@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f25ad139-f61b-4791-9eb5-f19323d22a5d",
+		"_postman_id": "9e83d636-5582-4814-bb79-cc5eac8e11fb",
 		"name": "shopping_cart",
 		"description": "Postman scripts for testing of the Shopping Cart REST API.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -343,7 +343,7 @@
 			"response": []
 		},
 		{
-			"name": "carts total",
+			"name": "totalPrice",
 			"event": [
 				{
 					"listen": "test",
@@ -354,9 +354,9 @@
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"Response is 0\", function () {",
+							"pm.test(\"TotalPrice is 99.98\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.eql(0);",
+							"    pm.expect(jsonData.totalPrice).to.eql(99.98);",
 							"});",
 							""
 						],
@@ -409,7 +409,7 @@
 			"response": []
 		},
 		{
-			"name": "cart total Copy",
+			"name": "cartPrice",
 			"event": [
 				{
 					"listen": "test",
@@ -420,9 +420,9 @@
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"Response is 0\", function () {",
+							"pm.test(\"TotalPrice is 99.98\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.eql(0);",
+							"    pm.expect(jsonData.totalPrice).to.eql(99.98);",
 							"});",
 							""
 						],
@@ -475,7 +475,7 @@
 			"response": []
 		},
 		{
-			"name": "cart total Copy Copy",
+			"name": "popularProducts",
 			"event": [
 				{
 					"listen": "test",
@@ -486,10 +486,19 @@
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"Response is 0\", function () {",
+							"pm.test(\"PopularProducts size is 1\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.eql(0);",
+							"    pm.expect(jsonData.popularProducts.length).to.eql(1);",
 							"});",
+							"",
+							"pm.test(\"PopularProducts has correct counts\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    var popularProducts = jsonData.popularProducts;",
+							"    ",
+							"    pm.expect(jsonData.popularProducts[0].productId).to.eql('b00535eb-3adb-417d-b93a-f79bd299f330');",
+							"    pm.expect(jsonData.popularProducts[0].count).to.eql(2);",
+							"});",
+							"",
 							""
 						],
 						"type": "text/javascript"
@@ -526,15 +535,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/cart/{{CART_ID}}",
+					"raw": "http://localhost:8080/product/popular",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"cart",
-						"{{CART_ID}}"
+						"product",
+						"popular"
 					]
 				}
 			},
