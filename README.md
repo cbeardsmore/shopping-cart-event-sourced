@@ -1,7 +1,7 @@
 # shopping-cart-event-sourced
 
 ![GitHub](https://img.shields.io/github/license/cbeardsmore/scart?style=plastic)
-
+![Gradle Build](https://github.com/cbeardsmore/shopping-cart-event-sourced/workflows/Gradle%20Build/badge.svg?branch=master)
 <img src="./images/logo.png" height="100">
 
 A shopping cart system in Java 11 and PostgreSQL implementing [Event Sourcing (ES)](https://martinfowler.com/eaaDev/EventSourcing.html) and [Command Query Responsibility Segregation (CQRS)](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs).
