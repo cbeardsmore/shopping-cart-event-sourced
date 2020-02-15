@@ -3,6 +3,7 @@ package com.cbeardsmore.scart.rest.utils;
 import com.cbeardsmore.scart.dataaccess.ReadModelStore;
 import com.cbeardsmore.scart.domain.model.PopularProduct;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -16,13 +17,13 @@ public class ReadModelStoreStub extends ReadModelStore {
     }
 
     @Override
-    public long getCartPrice(UUID cartId) {
-        return 0L;
+    public BigDecimal getCartPrice(UUID cartId) {
+        return BigDecimal.ZERO;
     }
 
     @Override
-    public long getTotalCartsPrice() {
-        return 0L;
+    public BigDecimal getTotalCartsPrice() {
+        return BigDecimal.ZERO;
     }
 
     @Override

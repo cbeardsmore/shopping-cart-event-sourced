@@ -13,22 +13,10 @@ public class PopularProductsResponse {
     }
 
     @Override
-    public String toString() {
-        return "PopularProductsResponse{" +
-                "popularProducts=" + popularProducts +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PopularProductsResponse that = (PopularProductsResponse) o;
         return Objects.equals(popularProducts, that.popularProducts);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(popularProducts);
     }
 }

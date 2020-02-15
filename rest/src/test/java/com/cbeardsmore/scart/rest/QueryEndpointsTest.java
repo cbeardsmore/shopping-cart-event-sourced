@@ -14,6 +14,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -45,7 +46,7 @@ class QueryEndpointsTest {
 
     @Test
     void givenGetCartPriceRequestThenCartPriceSsReturned() throws HttpClientException {
-        final var expected = new PriceResponse(0L);
+        final var expected = new PriceResponse(BigDecimal.ZERO);
         final var get = new GetMethod( BASE_URL + "/cart/" + CART_ID, false);
         final var response = httpClient.execute(get);
         final var body = new String(response.body());
@@ -55,7 +56,7 @@ class QueryEndpointsTest {
 
     @Test
     void givenGetTotalCartsPriceRequestThenTotalCartsPriceSsReturned() throws HttpClientException {
-        final var expected = new TotalPriceResponse(0L);
+        final var expected = new TotalPriceResponse(BigDecimal.ZERO);
         final var get = new GetMethod( BASE_URL + "/carts/total", false);
         final var response = httpClient.execute(get);
         final var body = new String(response.body());

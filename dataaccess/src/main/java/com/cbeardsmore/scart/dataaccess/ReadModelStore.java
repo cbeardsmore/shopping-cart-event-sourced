@@ -2,6 +2,7 @@ package com.cbeardsmore.scart.dataaccess;
 
 import com.cbeardsmore.scart.domain.model.PopularProduct;
 
+import java.math.BigDecimal;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,13 +26,13 @@ public class ReadModelStore {
         this.connectionUrl = connectionUrl;
     }
 
-    public long getCartPrice(UUID cartId) {
+    public BigDecimal getCartPrice(UUID cartId) {
         try (final var connection = DriverManager.getConnection(connectionUrl)) {
             try (final var statement = connection.prepareStatement(SELECT_CART_PRICE)) {
                 statement.setObject(1, cartId);
                 try (final var resultSet = statement.executeQuery()) {
                     resultSet.next();
-                    return resultSet.getLong(1);
+                    return resultSet.getBigDecimal(1);
                 }
             }
         } catch (SQLException ex) {
@@ -40,12 +41,12 @@ public class ReadModelStore {
     }
 
 
-    public long getTotalCartsPrice() {
+    public BigDecimal getTotalCartsPrice() {
         try (final var connection = DriverManager.getConnection(connectionUrl)) {
             try (final var statement = connection.prepareStatement(SELECT_TOTAL_PRICE)) {
                 try (final var resultSet = statement.executeQuery()) {
                     resultSet.next();
-                    return resultSet.getLong(1);
+                    return resultSet.getBigDecimal(1);
                 }
             }
         } catch (SQLException ex) {

@@ -1,14 +1,14 @@
 CREATE TABLE shopping_cart.total_price (
     id BIGSERIAL PRIMARY KEY,
     store TEXT,
-    totalPrice BIGINT NOT NULL,
+    totalPrice DECIMAL(12,2) NOT NULL,
     UNIQUE(store)
 );
 
 CREATE TABLE shopping_cart.cart_price (
     id BIGSERIAL PRIMARY KEY,
     cartId UUID NOT NULL,
-    price BIGINT NOT NULL,
+    price DECIMAL(12,2) NOT NULL,
     UNIQUE(cartId)
 );
 
