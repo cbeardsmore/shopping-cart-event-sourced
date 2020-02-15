@@ -27,12 +27,11 @@ jobs:
     - name: Build Gradle
       run: ./gradlew build
 
-    - name: Run jacocoTestReport
-      run: ./gradlew jacocoTestReport
+    - name: Run Code Coverage
+      run: ./gradlew codeCoverage
 
     - name: Push CodeCov Report
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./build/reports/jacoco/test/jacocoTestReport.xml
-        fail_ci_if_error: true
+        file: ./build/reports/jacoco/codeCoverage/codeCoverage.xml

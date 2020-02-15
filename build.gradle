@@ -1,4 +1,4 @@
-subprojects {
+allprojects {
     group 'com.cbeardsmore.scart'
     version '1.0-SNAPSHOT'
 
@@ -13,21 +13,29 @@ subprojects {
 
     test {
         useJUnitPlatform()
-
         testLogging {
             events "passed", "skipped", "failed"
         }
     }
-
-    jacocoTestReport {
-        reports {
-            xml.enabled true
-            html.enabled false
-        }
-    }
-
+}
+subprojects {
     dependencies {
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+    }
+}
+
+task codeCoverage(type: JacocoReport) {
+    dependsOn(subprojects*.test)
+
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    reports {
+        xml.enabled true
+        html.enabled true
     }
 }
