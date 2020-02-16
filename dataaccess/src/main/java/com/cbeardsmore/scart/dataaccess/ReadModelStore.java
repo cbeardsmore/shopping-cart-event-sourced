@@ -2,8 +2,8 @@ package com.cbeardsmore.scart.dataaccess;
 
 import com.cbeardsmore.scart.domain.model.PopularProduct;
 
+import javax.sql.DataSource;
 import java.math.BigDecimal;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +20,14 @@ public class ReadModelStore {
     private static final String SELECT_POPULAR_PRODUCTS =
             "SELECT productId, count FROM shopping_cart.popular_products LIMIT 5";
 
-    private final String connectionUrl;
+    private final DataSource dataSource;
 
-    public ReadModelStore(String connectionUrl) {
-        this.connectionUrl = connectionUrl;
+    public ReadModelStore(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public BigDecimal getCartPrice(UUID cartId) {
-        try (final var connection = DriverManager.getConnection(connectionUrl)) {
+        try (final var connection = dataSource.getConnection()) {
             try (final var statement = connection.prepareStatement(SELECT_CART_PRICE)) {
                 statement.setObject(1, cartId);
                 try (final var resultSet = statement.executeQuery()) {
@@ -42,7 +42,7 @@ public class ReadModelStore {
 
 
     public BigDecimal getTotalCartsPrice() {
-        try (final var connection = DriverManager.getConnection(connectionUrl)) {
+        try (final var connection = dataSource.getConnection()) {
             try (final var statement = connection.prepareStatement(SELECT_TOTAL_PRICE)) {
                 try (final var resultSet = statement.executeQuery()) {
                     resultSet.next();
@@ -55,7 +55,7 @@ public class ReadModelStore {
     }
 
     public List<PopularProduct> getPopularProducts() {
-        try (final var connection = DriverManager.getConnection(connectionUrl)) {
+        try (final var connection = dataSource.getConnection()) {
             try (final var statement = connection.prepareStatement(SELECT_POPULAR_PRODUCTS)) {
                 try (final var resultSet = statement.executeQuery()) {
                     final List<PopularProduct> products = new ArrayList<>();

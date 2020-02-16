@@ -6,8 +6,11 @@ import com.cbeardsmore.scart.domain.CommandHandler;
 import com.cbeardsmore.scart.rest.CommandEndpoints;
 import com.cbeardsmore.scart.rest.QueryEndpoints;
 import com.cbeardsmore.scart.rest.Server;
+import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
 
 public class App {
 
@@ -20,9 +23,9 @@ public class App {
 
     public static void main(String[] args) {
         LOGGER.info("Starting Shopping Cart Server...");
-        final var connectionUrl = getPostgresConnectionString();
-        final var repository = new PostgresRepository(connectionUrl);
-        final var readModelStore = new ReadModelStore(connectionUrl);
+        final var dataSource = getPostgresDataSource();
+        final var repository = new PostgresRepository(dataSource);
+        final var readModelStore = new ReadModelStore(dataSource);
         final var commandHandler = new CommandHandler(repository);
         final var commandEndpoints = new CommandEndpoints(commandHandler);
         final var queryEndpoints = new QueryEndpoints(readModelStore);
@@ -30,9 +33,13 @@ public class App {
         server.serve(SPARK_PORT);
     }
 
-    private static String getPostgresConnectionString() {
-        return String.format("jdbc:postgresql://postgres_db:5432/%s?user=%s&password=%s",
-            POSTGRES_DATABASE, POSTGRES_USERNAME, POSTGRES_PASSWORD
-        );
+    private static DataSource getPostgresDataSource() {
+        final var dataSource = new PGSimpleDataSource();
+        dataSource.setServerName("postgres_db");
+        dataSource.setPortNumber(5432);
+        dataSource.setDatabaseName(POSTGRES_DATABASE);
+        dataSource.setUser(POSTGRES_USERNAME);
+        dataSource.setPassword(POSTGRES_PASSWORD);
+        return dataSource;
     }
 }

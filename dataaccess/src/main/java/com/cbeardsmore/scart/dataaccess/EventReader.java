@@ -4,7 +4,7 @@ import com.cbeardsmore.scart.domain.event.Event;
 import com.cbeardsmore.scart.domain.event.EventType;
 import com.google.gson.Gson;
 
-import java.sql.DriverManager;
+import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,14 +15,14 @@ final class EventReader {
             "SELECT event_type, payload FROM event_store.events WHERE stream_type = (?) AND stream_id = (?) ORDER BY version ASC";
 
     private static final Gson GSON = new Gson();
-    private final String connectionUrl;
+    private final DataSource dataSource;
 
-    public EventReader(String connectionUrl) {
-        this.connectionUrl = connectionUrl;
+    public EventReader(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     final List<? extends Event> readStreamInstance(String streamType, String streamId) {
-        try (final var conn = DriverManager.getConnection(connectionUrl)) {
+        try (final var conn = dataSource.getConnection()) {
             try (final var statement = conn.prepareStatement(SELECT_SQL_BY_STREAM_ID)) {
                 statement.setString(1, streamType);
                 statement.setString(2, streamId);
