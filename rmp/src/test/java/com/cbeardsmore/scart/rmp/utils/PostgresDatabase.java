@@ -2,7 +2,10 @@ package com.cbeardsmore.scart.rmp.utils;
 
 import com.opentable.db.postgres.embedded.EmbeddedPostgres;
 import java.io.IOException;
+
 import org.flywaydb.core.Flyway;
+
+import javax.sql.DataSource;
 
 public class PostgresDatabase {
 
@@ -10,21 +13,21 @@ public class PostgresDatabase {
     private static final String PASSWORD = "supersecret";
     private static final String DB_NAME = "postgres";
 
-    private static String connectionUrl;
+    private static DataSource dataSource;
     private static Flyway flyway;
 
-    public static String provide() throws IOException {
-        if (connectionUrl == null) {
-            connectionUrl = EmbeddedPostgres.start().getJdbcUrl(USERNAME, DB_NAME);
+    public static DataSource provide() throws IOException {
+        if (dataSource == null) {
+            dataSource = EmbeddedPostgres.start().getPostgresDatabase();
             flyway = new Flyway();
-            flyway.setDataSource(connectionUrl, USERNAME, PASSWORD);
+            flyway.setDataSource(dataSource);
             flyway.setLocations("/db");
             flyway.setSchemas("event_store", "shopping_cart");
         } else {
             flyway.clean();
         }
         flyway.migrate();
-        return connectionUrl;
+        return dataSource;
     }
 
 

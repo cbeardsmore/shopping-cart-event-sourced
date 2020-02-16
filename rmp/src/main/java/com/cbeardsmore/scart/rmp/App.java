@@ -4,9 +4,11 @@ import com.cbeardsmore.scart.rmp.persistence.Bookmark;
 import com.cbeardsmore.scart.rmp.persistence.EventEnvelope;
 import com.cbeardsmore.scart.rmp.persistence.EventReader;
 import com.cbeardsmore.scart.rmp.persistence.PostgresRepository;
+import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 public class App {
@@ -19,11 +21,11 @@ public class App {
 
     public static void main(String[] args) {
         LOGGER.info("Starting shopping-cart-rmp...");
-        final var connectionUrl = getPostgresConnectionString();
-        final var bookmark = new Bookmark(connectionUrl);
-        final var repository = new PostgresRepository(bookmark, connectionUrl);
+        final var dataSource = getPostgresDataSource();
+        final var bookmark = new Bookmark(dataSource);
+        final var repository = new PostgresRepository(bookmark, dataSource);
         final var populator = new ReadModelPopulator(repository);
-        final var reader = new EventReader(connectionUrl);
+        final var reader = new EventReader(dataSource);
 
         try {
             //CB: lazy sleep to allow Postgres to spin up in local Docker
@@ -43,9 +45,13 @@ public class App {
         }
     }
 
-    private static String getPostgresConnectionString() {
-        return String.format("jdbc:postgresql://postgres_db:5432/%s?user=%s&password=%s",
-                POSTGRES_DATABASE, POSTGRES_USERNAME, POSTGRES_PASSWORD
-        );
+    private static DataSource getPostgresDataSource() {
+        final var dataSource = new PGSimpleDataSource();
+        dataSource.setServerName("postgres_db");
+        dataSource.setPortNumber(5432);
+        dataSource.setDatabaseName(POSTGRES_DATABASE);
+        dataSource.setUser(POSTGRES_USERNAME);
+        dataSource.setPassword(POSTGRES_PASSWORD);
+        return dataSource;
     }
 }

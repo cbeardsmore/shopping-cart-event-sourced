@@ -3,8 +3,8 @@ package com.cbeardsmore.scart.rmp.persistence;
 import com.cbeardsmore.scart.rmp.projection.CartPriceProjection;
 import com.cbeardsmore.scart.rmp.projection.PopularProductsProjection;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public final class PostgresRepository {
@@ -22,15 +22,15 @@ public final class PostgresRepository {
                     + "ON CONFLICT (store) DO UPDATE SET totalPrice = total_price.totalPrice + ?";
 
     private final Bookmark bookmark;
-    private final String connectionUrl;
+    private final DataSource dataSource;
 
-    public PostgresRepository(Bookmark bookmark, String connectionUrl) {
+    public PostgresRepository(Bookmark bookmark, DataSource dataSource) {
         this.bookmark = bookmark;
-        this.connectionUrl = connectionUrl;
+        this.dataSource = dataSource;
     }
 
     public void put(CartPriceProjection projection, long position) {
-        try (final var connection = DriverManager.getConnection(connectionUrl)) {
+        try (final var connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
             putCartPriceProjection(connection, projection);
             bookmark.put(connection, position);
@@ -41,7 +41,7 @@ public final class PostgresRepository {
     }
 
     public void put(CartPriceProjection cartPriceProjection, PopularProductsProjection productsProjection, long position) {
-        try (final var connection = DriverManager.getConnection(connectionUrl)) {
+        try (final var connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
             putCartPriceProjection(connection, cartPriceProjection);
             putPopularProductsProjection(connection, productsProjection);

@@ -1,7 +1,7 @@
 package com.cbeardsmore.scart.rmp.persistence;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Bookmark {
@@ -13,14 +13,14 @@ public class Bookmark {
             "INSERT INTO shopping_cart.bookmark (rmp, position) VALUES ('shopping-cart-rmp', ?) "
                     + "ON CONFLICT (rmp) DO UPDATE SET position = ?";
 
-    private final String connectionUrl;
+    private final DataSource dataSource;
 
-    public Bookmark(String connectionUrl) {
-        this.connectionUrl = connectionUrl;
+    public Bookmark(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public long get() {
-        try (final var connection = DriverManager.getConnection(connectionUrl)) {
+        try (final var connection = dataSource.getConnection()) {
             try (final var statement = connection.prepareStatement(SELECT_BOOKMARK)) {
                 try (final var resultSet = statement.executeQuery()) {
                     resultSet.next();
@@ -33,7 +33,7 @@ public class Bookmark {
     }
 
     public void put(long position) {
-        try (final var connection = DriverManager.getConnection(connectionUrl)) {
+        try (final var connection = dataSource.getConnection()) {
             put(connection, position);
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

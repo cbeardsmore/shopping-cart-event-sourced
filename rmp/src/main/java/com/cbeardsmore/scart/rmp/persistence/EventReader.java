@@ -4,8 +4,8 @@ import com.cbeardsmore.scart.domain.event.Event;
 import com.cbeardsmore.scart.domain.event.EventType;
 import com.google.gson.Gson;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,14 +17,14 @@ public class EventReader {
             "SELECT stream_id, event_type, payload, position FROM event_store.events WHERE position > ? LIMIT 20";
 
     private static final Gson GSON = new Gson();
-    private final String connectionUrl;
+    private final DataSource dataSource;
 
-    public EventReader(String connectionUrl) {
-        this.connectionUrl = connectionUrl;
+    public EventReader(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public List<EventEnvelope> readAll(long fromPosition) throws SQLException, ClassNotFoundException {
-        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+        try (Connection conn = dataSource.getConnection()) {
             try (PreparedStatement statement = conn.prepareStatement(SELECT_ALL)) {
                 statement.setLong(1, fromPosition);
                 try (ResultSet rs = statement.executeQuery()) {
