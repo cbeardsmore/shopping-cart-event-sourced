@@ -43,10 +43,8 @@ public class ReadModelPopulator {
     private void productAdded(EventEnvelope envelope) {
         final var event = (ProductAddedEvent)envelope.getEvent();
         final var cartId = envelope.getStreamId();
-        final var quantity = event.getQuantity();
-        final var totalPrice = event.getPrice().multiply(BigDecimal.valueOf(quantity));
-        final var cartProjection = new CartPriceProjection(cartId, totalPrice);
-        final var productProjection = new PopularProductsProjection(event.getProductId(), quantity);
+        final var cartProjection = new CartPriceProjection(cartId, event.getPrice());
+        final var productProjection = new PopularProductsProjection(event.getProductId(), 1);
         productPrices.put(event.getProductId(), event.getPrice());
         repository.put(cartProjection, productProjection, envelope.getPosition());
     }

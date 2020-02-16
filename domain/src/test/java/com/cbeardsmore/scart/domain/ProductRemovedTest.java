@@ -17,7 +17,6 @@ class ProductRemovedTest {
     private static final UUID PRODUCT_ID = UUID.randomUUID();
     private static final String NAME = "Samsung TV";
     private static final BigDecimal PRICE = BigDecimal.TEN;
-    private static final int QUANTITY = 1;
 
     private final TestContext context = TestContext.init();
 
@@ -25,7 +24,7 @@ class ProductRemovedTest {
     void givenCartCreatedandProductAddedEventWhenRemoveProductCommandShouldRaiseProductRemovedEvent() {
         final var command = new RemoveProductCommand(CART_ID, PRODUCT_ID);
         context.givenEvent(new CartCreatedEvent());
-        context.givenEvent(new ProductAddedEvent(PRODUCT_ID, NAME, PRICE, QUANTITY));
+        context.givenEvent(new ProductAddedEvent(PRODUCT_ID, NAME, PRICE));
         context.whenCommand(command);
 
         final var event = new ProductRemovedEvent(PRODUCT_ID);

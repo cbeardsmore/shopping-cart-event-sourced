@@ -16,24 +16,23 @@ class ProductAddedTest {
     private static final UUID PRODUCT_ID = UUID.randomUUID();
     private static final String NAME = "Samsung TV";
     private static final BigDecimal PRICE = BigDecimal.TEN;
-    private static final int QUANTITY = 1;
 
     private final TestContext context = TestContext.init();
 
     @Test
     void givenCartCreatedEventWhenAddProductCommandShouldRaiseProductAddedEvent() {
-        final var command = new AddProductCommand(CART_ID, PRODUCT_ID, NAME, PRICE, QUANTITY);
+        final var command = new AddProductCommand(CART_ID, PRODUCT_ID, NAME, PRICE);
         context.givenEvent(new CartCreatedEvent());
         context.whenCommand(command);
 
-        final var event = new ProductAddedEvent(PRODUCT_ID, NAME, PRICE, QUANTITY);
+        final var event = new ProductAddedEvent(PRODUCT_ID, NAME, PRICE);
         context.thenAssertEventAndPayload(event);
         context.thenAssertNoOtherEventsAreRaised();
     }
 
     @Test
     void givenNoEventsWhenAddProductCommandShouldThrowIllegalStateException() {
-        final var command = new AddProductCommand(CART_ID, PRODUCT_ID, NAME, PRICE, QUANTITY);
+        final var command = new AddProductCommand(CART_ID, PRODUCT_ID, NAME, PRICE);
         context.givenNoEvents();
         context.whenCommand(command);
 
@@ -43,7 +42,7 @@ class ProductAddedTest {
 
     @Test
     void givenCheckoutCompletedEventWhenAddProductCommandShouldThrowIllegalStateException() {
-        final var command = new AddProductCommand(CART_ID, PRODUCT_ID, NAME, PRICE, QUANTITY);
+        final var command = new AddProductCommand(CART_ID, PRODUCT_ID, NAME, PRICE);
         context.givenEvent(new CheckoutCompletedEvent(BigDecimal.TEN));
         context.whenCommand(command);
 

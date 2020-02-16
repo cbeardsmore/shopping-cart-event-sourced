@@ -10,16 +10,14 @@ public class AddProductRequest {
     private final UUID productId;
     private final String name;
     private final BigDecimal price;
-    private final int quantity;
 
-    public AddProductRequest(UUID productId, String name, BigDecimal price, int quantity) {
+    public AddProductRequest(UUID productId, String name, BigDecimal price) {
         this.productId = productId;
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
     }
 
     public AddProductCommand toCommand(UUID cartId) {
-        return new AddProductCommand(cartId, productId, name, price, quantity);
+        return new AddProductCommand(cartId, productId, name, price);
     }
 }

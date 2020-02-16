@@ -13,9 +13,8 @@ public class AddProductCommand implements Command {
     private final UUID productId;
     private final String name;
     private final BigDecimal price;
-    private final int quantity;
 
-    public AddProductCommand(UUID cartId, UUID productId, String name, BigDecimal price, int quantity) {
+    public AddProductCommand(UUID cartId, UUID productId, String name, BigDecimal price) {
         if (cartId == null)
             throw new CommandValidationException("cartId");
         if (productId == null)
@@ -24,14 +23,11 @@ public class AddProductCommand implements Command {
             throw new CommandValidationException("name");
         if (price == null || price.compareTo(BigDecimal.ZERO) < 0)
             throw new CommandValidationException("price");
-        if (quantity <= 0)
-            throw new CommandValidationException("quantity");
 
         this.cartId = cartId;
         this.productId = productId;
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
     }
 
     public UUID getCartId() {
@@ -50,30 +46,25 @@ public class AddProductCommand implements Command {
         return price;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
     @Override
     public String toString() {
-        return String.format("AddProductCommand[cartId=%s,productId=%s,name=%s,price=%s,quantity=%d]",
-                cartId, productId, name, price, quantity);
+        return String.format("AddProductCommand[cartId=%s,productId=%s,name=%s,price=%s]",
+                cartId, productId, name, price);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AddProductCommand that = (AddProductCommand) o;
-        return quantity == that.quantity &&
-                Objects.equals(cartId, that.cartId) &&
-                Objects.equals(productId, that.productId) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(price, that.price);
+        AddProductCommand command = (AddProductCommand) o;
+        return Objects.equals(cartId, command.cartId) &&
+                Objects.equals(productId, command.productId) &&
+                Objects.equals(name, command.name) &&
+                Objects.equals(price, command.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cartId, productId, name, price, quantity);
+        return Objects.hash(cartId, productId, name, price);
     }
 }

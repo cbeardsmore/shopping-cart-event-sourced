@@ -26,7 +26,6 @@ class CommandEndpointsTest {
     private static final UUID PRODUCT_ID = UUID.randomUUID();
     private static final String NAME = "Samsung TV";
     private static final BigDecimal PRICE = BigDecimal.TEN;
-    private static final int QUANTITY = 2;
 
     private static final String BASE_URL = "http://localhost:4567/cart/";
     private static final Gson GSON = new Gson();
@@ -59,11 +58,11 @@ class CommandEndpointsTest {
 
     @Test
     void givenAddProductRequestThenAddProductCommandIsPassedToHandler() throws HttpClientException {
-        final var addProductRequest = new AddProductRequest(PRODUCT_ID, NAME, PRICE, QUANTITY);
+        final var addProductRequest = new AddProductRequest(PRODUCT_ID, NAME, PRICE);
         final var post = new PostMethod(BASE_URL + CART_ID.toString(), GSON.toJson(addProductRequest), false);
         final var response = httpClient.execute(post);
 
-        final var expectedCommand = new AddProductCommand(CART_ID, PRODUCT_ID, NAME, PRICE, QUANTITY);
+        final var expectedCommand = new AddProductCommand(CART_ID, PRODUCT_ID, NAME, PRICE);
         final var actualCommand = server.getLastCommand();
         assertEquals(expectedCommand, actualCommand);
         assertEquals(200, response.code());

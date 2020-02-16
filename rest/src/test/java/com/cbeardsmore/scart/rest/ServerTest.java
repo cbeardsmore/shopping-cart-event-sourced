@@ -82,7 +82,7 @@ class ServerTest {
 
     @Test
     void givenAddProductRequestWhenCommandValidationExceptionIsThrownThenReturn400() throws HttpClientException {
-        final var payload = GSON.toJson(new AddProductRequest(PRODUCT_ID, NAME, PRICE, 0));
+        final var payload = GSON.toJson(new AddProductRequest(PRODUCT_ID, NAME, BigDecimal.valueOf(-1L)));
         final var post = new PostMethod(BASE_CART_URL + CART_ID.toString(), payload, false);
         final var response = httpClient.execute(post);
         assertEquals(400, response.code());

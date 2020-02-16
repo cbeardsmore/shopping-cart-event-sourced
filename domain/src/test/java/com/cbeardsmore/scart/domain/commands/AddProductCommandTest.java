@@ -18,18 +18,17 @@ class AddProductCommandTest {
     private static final UUID PRODUCT_ID = UUID.randomUUID();
     private static final String NAME = "Samsung TV";
     private static final BigDecimal PRICE = BigDecimal.TEN;
-    private static final int QUANTITY = 1;
 
     @Test
     void givenNullCartIdShouldThrowCommandValidationException() {
         assertThrows(CommandValidationException.class,
-                () -> new AddProductCommand(null, PRODUCT_ID, NAME, PRICE, QUANTITY));
+                () -> new AddProductCommand(null, PRODUCT_ID, NAME, PRICE));
     }
 
     @Test
     void givenNullProductIdShouldThrowCommandValidationException() {
         assertThrows(CommandValidationException.class,
-                () -> new AddProductCommand(CART_ID, null, NAME, PRICE, QUANTITY));
+                () -> new AddProductCommand(CART_ID, null, NAME, PRICE));
     }
 
     @ParameterizedTest
@@ -37,24 +36,18 @@ class AddProductCommandTest {
     @ValueSource(strings = {"  ", "\t", "\n"})
     void givenInvalidNameShouldThrowCommandValidationException(String name) {
         assertThrows(CommandValidationException.class,
-                () -> new AddProductCommand(CART_ID, PRODUCT_ID, name, PRICE, QUANTITY));
+                () -> new AddProductCommand(CART_ID, PRODUCT_ID, name, PRICE));
     }
 
     @Test
     void givenNullPriceShouldThrowCommandValidationException() {
         assertThrows(CommandValidationException.class,
-                () -> new AddProductCommand(CART_ID, PRODUCT_ID, NAME, null, QUANTITY));
+                () -> new AddProductCommand(CART_ID, PRODUCT_ID, NAME, null));
     }
 
     @Test
     void givenNegativePriceShouldThrowCommandValidationException() {
         assertThrows(CommandValidationException.class,
-                () -> new AddProductCommand(CART_ID, PRODUCT_ID, NAME, BigDecimal.valueOf(-10L), QUANTITY));
-    }
-
-    @Test
-    void givenNegativeQuantityShouldThrowCommandValidationException() {
-        assertThrows(CommandValidationException.class,
-                () -> new AddProductCommand(CART_ID, PRODUCT_ID, NAME, PRICE, -1));
+                () -> new AddProductCommand(CART_ID, PRODUCT_ID, NAME, BigDecimal.valueOf(-10L)));
     }
 }

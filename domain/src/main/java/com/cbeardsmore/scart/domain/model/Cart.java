@@ -45,8 +45,7 @@ public class Cart extends AggregateRoot {
         final var productAddedEvent = new ProductAddedEvent(
                 command.getProductId(),
                 command.getName(),
-                command.getPrice(),
-                command.getQuantity()
+                command.getPrice()
         );
         addEvent(productAddedEvent);
     }
@@ -81,11 +80,9 @@ public class Cart extends AggregateRoot {
     private void handle(ProductAddedEvent event) {
         final var productId = event.getProductId();
         final var existingQuantity = productQuantities.getOrDefault(productId, 0);
-        final var totalPrice = event.getPrice().multiply(BigDecimal.valueOf(event.getQuantity()));
-
         productPrices.put(productId, event.getPrice());
-        productQuantities.put(productId, existingQuantity + event.getQuantity());
-        price = price.add(totalPrice);
+        productQuantities.put(productId, existingQuantity + 1);
+        price = price.add(event.getPrice());
     }
 
     private void handle(ProductRemovedEvent event) {

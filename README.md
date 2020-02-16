@@ -61,8 +61,7 @@ REQUEST:
 {
   "productId": "UUID",
   "name": "Samsung TV",
-  "price": 49.99,
-  "quantity: 2
+  "price": 49.99
 }
 ```
 
