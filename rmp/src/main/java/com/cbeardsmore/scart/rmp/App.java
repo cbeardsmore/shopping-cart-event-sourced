@@ -28,8 +28,6 @@ public class App {
         final var reader = new EventReader(dataSource);
 
         try {
-            //CB: lazy sleep to allow Postgres to spin up in local Docker
-            Thread.sleep(500);
             long position = bookmark.get();
             LOGGER.info("Starting Bookmark Positions: {}", position);
 

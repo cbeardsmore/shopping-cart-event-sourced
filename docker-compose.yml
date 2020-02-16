@@ -24,6 +24,7 @@ services:
       POSTGRES_DATABASE: shopping_cart
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: supersecret
+    restart: on-failure
   postgres_db:
     container_name: postgres_db
     build:
