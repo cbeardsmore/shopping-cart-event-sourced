@@ -1,5 +1,6 @@
 version: '3'
 services:
+
   spark_server:
     container_name: spark_server
     build:
@@ -13,6 +14,7 @@ services:
       POSTGRES_DATABASE: shopping_cart
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: supersecret
+
   read_model_populator:
     container_name: read_model_populator
     build:
@@ -25,6 +27,7 @@ services:
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: supersecret
     restart: on-failure
+
   postgres_db:
     container_name: postgres_db
     build:
