@@ -1,5 +1,6 @@
 package com.cbeardsmore.scart.rmp;
 
+import com.cbeardsmore.scart.domain.event.EventType;
 import com.cbeardsmore.scart.domain.event.ProductAddedEvent;
 import com.cbeardsmore.scart.domain.event.ProductRemovedEvent;
 import com.cbeardsmore.scart.rmp.persistence.EventEnvelope;
@@ -23,9 +24,9 @@ public class ReadModelPopulator {
         handlers = new HashMap<>();
         productPrices = new HashMap<>();
 
-        handlers.put("CART_CREATED", this::cartCreated);
-        handlers.put("PRODUCT_ADDED", this::productAdded);
-        handlers.put("PRODUCT_REMOVED", this::productRemoved);
+        handlers.put(EventType.CART_CREATED.name(), this::cartCreated);
+        handlers.put(EventType.PRODUCT_ADDED.name(), this::productAdded);
+        handlers.put(EventType.PRODUCT_REMOVED.name(), this::productRemoved);
     }
 
     public void dispatch(EventEnvelope envelope) {
