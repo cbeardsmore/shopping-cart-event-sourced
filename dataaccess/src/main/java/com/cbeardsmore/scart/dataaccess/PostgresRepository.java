@@ -17,7 +17,7 @@ public class PostgresRepository implements Repository<Cart> {
 
     @Override
     public Cart load(UUID id) {
-        final var currentState = reader.readStreamInstance("Cart", id.toString());
+        final var currentState = reader.readStreamInstance(id);
         final var cart = new Cart(id);
         for (var event : currentState) {
             cart.apply(event);
