@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EventReader {
     private static final String SELECT_ALL =
@@ -37,7 +38,7 @@ public class EventReader {
     private List<EventEnvelope> mapToEvents(ResultSet resultSet) throws SQLException, ClassNotFoundException {
         final List<EventEnvelope> output = new ArrayList<>();
         while (resultSet.next()) {
-            final String streamId = resultSet.getString(1);
+            final UUID streamId = resultSet.getObject(1, UUID.class);
             final String eventType = resultSet.getString(2);
             final String payload = resultSet.getString(3);
             final long position = resultSet.getLong(4);

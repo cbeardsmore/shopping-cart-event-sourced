@@ -9,11 +9,12 @@ import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 final class EventAppender {
 
     private static final String INSERT_SQL =
-            "INSERT INTO event_store.events (stream_type, stream_id, version, event_type, payload) VALUES (?, ?, ?, ?, ?)";
+            "INSERT INTO event_store.events (stream_id, version, event_type, payload) VALUES (?, ?, ?, ?)";
 
     private static final Gson GSON = new Gson();
 
@@ -23,7 +24,7 @@ final class EventAppender {
         this.dataSource = dataSource;
     }
 
-    public void append(String streamType, String streamId, int expectedVersion, List<Event> events) {
+    public void append(UUID streamId, int expectedVersion, List<Event> events) {
         int version = expectedVersion + 1;
 
         try (final var conn = dataSource.getConnection()) {
@@ -31,11 +32,10 @@ final class EventAppender {
             for (var event : events) {
                 final PreparedStatement statement = conn.prepareStatement(INSERT_SQL);
                 final PGobject payloadJson = toPgJson(event);
-                statement.setString(1, streamType);
-                statement.setString(2, streamId);
-                statement.setInt(3, version);
-                statement.setString(4, EventType.fromClass(event.getClass()).name());
-                statement.setObject(5, payloadJson);
+                statement.setObject(1, streamId);
+                statement.setInt(2, version);
+                statement.setString(3, EventType.fromClass(event.getClass()).name());
+                statement.setObject(4, payloadJson);
                 statement.executeUpdate();
                 version++;
             }

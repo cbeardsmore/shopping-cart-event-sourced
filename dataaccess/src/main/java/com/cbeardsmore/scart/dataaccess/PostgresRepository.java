@@ -29,6 +29,6 @@ public class PostgresRepository implements Repository<Cart> {
     public void save(Cart cart) {
         final var events = cart.getEvents();
         int expectedVersion = cart.getVersion() - events.size();
-        writer.append("Cart", cart.getId().toString(), expectedVersion, events);
+        writer.append(cart.getId(), expectedVersion, events);
     }
 }

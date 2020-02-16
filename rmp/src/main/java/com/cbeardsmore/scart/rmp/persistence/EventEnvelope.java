@@ -2,21 +2,23 @@ package com.cbeardsmore.scart.rmp.persistence;
 
 import com.cbeardsmore.scart.domain.event.Event;
 
+import java.util.UUID;
+
 public class EventEnvelope {
 
-    private final String streamId;
+    private final UUID streamId;
     private final String type;
     private final long position;
     private final Event event;
 
-    public EventEnvelope(String streamId, String type, long position, Event event) {
+    public EventEnvelope(UUID streamId, String type, long position, Event event) {
         this.streamId = streamId;
         this.type = type;
         this.position = position;
         this.event = event;
     }
 
-    public String getStreamId() {
+    public UUID getStreamId() {
         return streamId;
     }
 

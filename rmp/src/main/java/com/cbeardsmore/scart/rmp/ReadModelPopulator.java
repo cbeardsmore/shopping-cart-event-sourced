@@ -35,14 +35,14 @@ public class ReadModelPopulator {
     }
 
     private void cartCreated(EventEnvelope envelope) {
-        final var cartId = UUID.fromString(envelope.getStreamId());
+        final var cartId = envelope.getStreamId();
         final var projection = new CartPriceProjection(cartId, BigDecimal.ZERO);
         repository.put(projection, envelope.getPosition());
     }
 
     private void productAdded(EventEnvelope envelope) {
         final var event = (ProductAddedEvent)envelope.getEvent();
-        final var cartId = UUID.fromString(envelope.getStreamId());
+        final var cartId = envelope.getStreamId();
         final var quantity = event.getQuantity();
         final var totalPrice = event.getPrice().multiply(BigDecimal.valueOf(quantity));
         final var cartProjection = new CartPriceProjection(cartId, totalPrice);
@@ -53,7 +53,7 @@ public class ReadModelPopulator {
 
     private void productRemoved(EventEnvelope envelope) {
         final var event = (ProductRemovedEvent)envelope.getEvent();
-        final var cartId = UUID.fromString(envelope.getStreamId());
+        final var cartId = envelope.getStreamId();
         final var price = productPrices.get(event.getProductId()).negate();
         final var cartProjection = new CartPriceProjection(cartId, price);
         final var productProjection = new PopularProductsProjection(event.getProductId(), -1);
