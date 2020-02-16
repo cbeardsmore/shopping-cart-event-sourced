@@ -2,7 +2,6 @@ package com.cbeardsmore.scart.rest;
 
 import com.cbeardsmore.scart.domain.model.PopularProduct;
 import com.cbeardsmore.scart.rest.response.PopularProductsResponse;
-import com.cbeardsmore.scart.rest.response.PriceResponse;
 import com.cbeardsmore.scart.rest.response.TotalPriceResponse;
 import com.cbeardsmore.scart.rest.utils.ReadModelStoreStub;
 import com.cbeardsmore.scart.rest.utils.TestServer;
@@ -46,12 +45,12 @@ class QueryEndpointsTest {
 
     @Test
     void givenGetCartPriceRequestThenCartPriceSsReturned() throws HttpClientException {
-        final var expected = new PriceResponse(BigDecimal.ZERO);
+        final var expected = new TotalPriceResponse(BigDecimal.ZERO);
         final var get = new GetMethod( BASE_URL + "/cart/" + CART_ID, false);
         final var response = httpClient.execute(get);
         final var body = new String(response.body());
         assertEquals(200, response.code());
-        assertEquals(expected, GSON.fromJson(body, PriceResponse.class));
+        assertEquals(expected, GSON.fromJson(body, TotalPriceResponse.class));
     }
 
     @Test

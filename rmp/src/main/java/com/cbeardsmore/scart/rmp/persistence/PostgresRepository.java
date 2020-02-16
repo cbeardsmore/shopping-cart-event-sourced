@@ -4,6 +4,7 @@ import com.cbeardsmore.scart.rmp.projection.CartPriceProjection;
 import com.cbeardsmore.scart.rmp.projection.PopularProductsProjection;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -56,8 +57,8 @@ public final class PostgresRepository {
     private void putCartPriceProjection(Connection connection, CartPriceProjection projection) throws SQLException {
         try (final var statement = connection.prepareStatement(INSERT_CART_PRICE_PROJECTION)) {
             statement.setObject(1, projection.getCartId());
-            statement.setLong(2, projection.getPrice());
-            statement.setLong(3, projection.getPrice());
+            statement.setBigDecimal(2, projection.getPrice());
+            statement.setBigDecimal(3, projection.getPrice());
             statement.executeUpdate();
         }
     }
@@ -71,10 +72,10 @@ public final class PostgresRepository {
         }
     }
 
-    private void updateTotalPrice(Connection connection, long price) throws SQLException {
+    private void updateTotalPrice(Connection connection, BigDecimal price) throws SQLException {
         try (final var statement = connection.prepareStatement(UPDATE_TOTAL_PRICE)) {
-            statement.setLong(1, price);
-            statement.setLong(2, price);
+            statement.setBigDecimal(1, price);
+            statement.setBigDecimal(2, price);
             statement.executeUpdate();
         }
     }

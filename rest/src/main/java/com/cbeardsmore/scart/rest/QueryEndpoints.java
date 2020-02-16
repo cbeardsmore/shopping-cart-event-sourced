@@ -2,7 +2,6 @@ package com.cbeardsmore.scart.rest;
 
 import com.cbeardsmore.scart.dataaccess.ReadModelStore;
 import com.cbeardsmore.scart.rest.response.PopularProductsResponse;
-import com.cbeardsmore.scart.rest.response.PriceResponse;
 import com.cbeardsmore.scart.rest.response.TotalPriceResponse;
 import com.google.gson.Gson;
 import spark.Request;
@@ -31,9 +30,9 @@ public class QueryEndpoints {
         get("/product/popular", JSON_CONTENT, this::getPopularProducts, gson::toJson);
     }
 
-    private PriceResponse getCartPrice(Request request, Response response) {
+    private TotalPriceResponse getCartPrice(Request request, Response response) {
         final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
-        return new PriceResponse(store.getCartPrice(cartId));
+        return new TotalPriceResponse(store.getCartPrice(cartId));
     }
 
     private TotalPriceResponse getTotalCartsPrice(Request request, Response response) {

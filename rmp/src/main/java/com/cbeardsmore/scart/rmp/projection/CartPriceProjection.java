@@ -1,12 +1,13 @@
 package com.cbeardsmore.scart.rmp.projection;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class CartPriceProjection {
     private final UUID cartId;
-    private final long price;
+    private final BigDecimal price;
 
-    public CartPriceProjection(UUID cartId, long price) {
+    public CartPriceProjection(UUID cartId, BigDecimal price) {
         this.cartId = cartId;
         this.price = price;
     }
@@ -15,7 +16,7 @@ public class CartPriceProjection {
         return cartId;
     }
 
-    public long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 }
