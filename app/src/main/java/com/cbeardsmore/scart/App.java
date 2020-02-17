@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 public class App {
 
     private static final int SPARK_PORT = 8080;
+    private static final String POSTGRES_SERVER = "postgres_db";
     private static final String POSTGRES_USERNAME = System.getenv("POSTGRES_USERNAME");
     private static final String POSTGRES_PASSWORD = System.getenv("POSTGRES_PASSWORD");
     private static final String POSTGRES_DATABASE = System.getenv("POSTGRES_DATABASE");
@@ -35,8 +36,8 @@ public class App {
 
     private static DataSource getPostgresDataSource() {
         final var dataSource = new PGSimpleDataSource();
-        dataSource.setServerName("postgres_db");
         dataSource.setPortNumber(5432);
+        dataSource.setServerName(POSTGRES_SERVER);
         dataSource.setDatabaseName(POSTGRES_DATABASE);
         dataSource.setUser(POSTGRES_USERNAME);
         dataSource.setPassword(POSTGRES_PASSWORD);
