@@ -30,17 +30,16 @@ public class QueryEndpoints {
         get("/product/popular", JSON_CONTENT, this::getPopularProducts, gson::toJson);
     }
 
+    private TotalPriceResponse getTotalCartsPrice(Request request, Response response) {
+        return new TotalPriceResponse(store.getTotalCartsPrice());
+    }
+
     private TotalPriceResponse getCartPrice(Request request, Response response) {
         final var cartId = UUID.fromString(request.params(PATH_PARAM_CART_ID));
         return new TotalPriceResponse(store.getCartPrice(cartId));
     }
 
-    private TotalPriceResponse getTotalCartsPrice(Request request, Response response) {
-        return new TotalPriceResponse(store.getTotalCartsPrice());
-    }
-
     private PopularProductsResponse getPopularProducts(Request request, Response response) {
         return new PopularProductsResponse(store.getPopularProducts());
-
     }
 }

@@ -14,7 +14,9 @@ import spark.Response;
 
 import java.util.UUID;
 
-import static spark.Spark.*;
+import static spark.Spark.delete;
+import static spark.Spark.path;
+import static spark.Spark.post;
 
 public class CommandEndpoints {
 
@@ -42,7 +44,9 @@ public class CommandEndpoints {
     }
 
     private Receipt createCart(Request request, Response response) {
-        return commandHandler.handle(new CreateCartCommand());
+        final var receipt = commandHandler.handle(new CreateCartCommand());
+        LOGGER.info("Cart Created: {}", receipt);
+        return receipt;
     }
 
     private Receipt addItem(Request request, Response response) {

@@ -42,16 +42,16 @@ public class Server {
         exception(RuntimeException.class, (ex, req, res) -> handleUnexpected(ex, res));
     }
 
-    private void handleUnexpected(RuntimeException ex, Response res) {
-        LOGGER.error("Unexpected Exception caught by server: ", ex);
-        res.body("Internal Server Error");
-        res.status(500);
-    }
-
     private void setAccessControlHeaders(Request request, Response response) {
         response.header("Access-Control-Allow-Methods", "GET, POST, HEAD, OPTIONS");
         response.header("Access-Control-Allow-Origin", "*");
         response.type("application/json");
+    }
+
+    private void handleUnexpected(RuntimeException ex, Response res) {
+        LOGGER.error("Unexpected Exception caught by server: ", ex);
+        res.body("Internal Server Error");
+        res.status(500);
     }
 
     private void handleDuplicateTransaction(DuplicateTransactionException ex, Response res) {

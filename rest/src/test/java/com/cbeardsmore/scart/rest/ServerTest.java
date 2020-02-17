@@ -6,7 +6,6 @@ import com.cbeardsmore.scart.rest.utils.TestServer;
 import com.despegar.http.client.GetMethod;
 import com.despegar.http.client.HttpClient;
 import com.despegar.http.client.HttpClientException;
-import com.despegar.http.client.HttpResponse;
 import com.despegar.http.client.OptionsMethod;
 import com.despegar.http.client.PostMethod;
 import com.google.gson.Gson;
@@ -30,7 +29,6 @@ class ServerTest {
     private static final UUID CART_ID = UUID.randomUUID();
     private static final UUID PRODUCT_ID = UUID.randomUUID();
     private static final String NAME = "Samsung TV";
-    private static final BigDecimal PRICE = BigDecimal.TEN;
     private static final Gson GSON = new Gson();
 
     private static HttpClient httpClient;
