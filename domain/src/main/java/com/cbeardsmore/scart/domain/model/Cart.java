@@ -58,8 +58,7 @@ public class Cart extends AggregateRoot {
         if (!productQuantities.containsKey(command.getProductId()))
             throw new IllegalArgumentException(String.format("Cart %s does not contain product %s", this.getId(), command.getProductId()));
 
-        final var productRemovedEvent = new ProductRemovedEvent(command.getProductId());
-        addEvent(productRemovedEvent);
+        addEvent(new ProductRemovedEvent(command.getProductId()));
     }
 
     public void checkout(CheckoutCommand command) {
@@ -67,6 +66,7 @@ public class Cart extends AggregateRoot {
             throw new IllegalStateException(String.format("Cart does not exist with id[%s]", command.getCartId()));
         if (orderCompleted)
             throw new DuplicateTransactionException(String.format("Cart %s is already checked out", this.getId()));
+
         addEvent(new CheckoutCompletedEvent(price));
     }
 
@@ -88,11 +88,11 @@ public class Cart extends AggregateRoot {
     private void handle(ProductRemovedEvent event) {
         final var productId = event.getProductId();
         final var productPrice = productPrices.get(productId);
-        final var existingQuantity = productQuantities.get(productId);
-        productQuantities.put(productId, existingQuantity - 1);
-        if (productQuantities.get(productId) == 0) {
+        final var newQuantity = productQuantities.get(productId) - 1;
+        if (newQuantity == 0)
             productQuantities.remove(productId);
-        }
+        else
+            productQuantities.put(productId, newQuantity);
         price = price.subtract(productPrice);
     }
 
