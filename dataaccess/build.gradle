@@ -1,5 +1,5 @@
 dependencies {
-    compile project(':domain')
     compile 'com.google.code.gson:gson:2.8.5'
     compile 'org.postgresql:postgresql:42.2.2'
+    compile project(':domain')
 }

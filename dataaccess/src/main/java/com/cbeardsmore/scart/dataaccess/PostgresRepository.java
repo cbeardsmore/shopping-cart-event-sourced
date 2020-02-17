@@ -19,16 +19,15 @@ public class PostgresRepository implements Repository<Cart> {
     public Cart load(UUID id) {
         final var currentState = reader.readStreamInstance(id);
         final var cart = new Cart(id);
-        for (var event : currentState) {
+        for (var event : currentState)
             cart.apply(event);
-        }
         return cart;
     }
 
     @Override
     public void save(Cart cart) {
         final var events = cart.getEvents();
-        int expectedVersion = cart.getVersion() - events.size();
+        final var expectedVersion = cart.getVersion() - events.size();
         writer.append(cart.getId(), expectedVersion, events);
     }
 }

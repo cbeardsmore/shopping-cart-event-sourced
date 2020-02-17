@@ -31,7 +31,9 @@ public class ReadModelStore {
             try (final var statement = connection.prepareStatement(SELECT_CART_PRICE)) {
                 statement.setObject(1, cartId);
                 try (final var resultSet = statement.executeQuery()) {
-                    resultSet.next();
+                    final var cartExists = resultSet.next();
+                    if (!cartExists)
+                        throw new IllegalStateException(String.format("Cart does not exist with id[%s]", cartId));
                     return resultSet.getBigDecimal(1);
                 }
             }
@@ -45,7 +47,9 @@ public class ReadModelStore {
         try (final var connection = dataSource.getConnection()) {
             try (final var statement = connection.prepareStatement(SELECT_TOTAL_PRICE)) {
                 try (final var resultSet = statement.executeQuery()) {
-                    resultSet.next();
+                    final var cartsExist = resultSet.next();
+                    if (!cartsExist)
+                        return BigDecimal.ZERO;
                     return resultSet.getBigDecimal(1);
                 }
             }
