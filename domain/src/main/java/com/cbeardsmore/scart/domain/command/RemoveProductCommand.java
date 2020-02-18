@@ -41,9 +41,4 @@ public class RemoveProductCommand implements Command {
         return Objects.equals(cartId, that.cartId) &&
                 Objects.equals(productId, that.productId);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cartId, productId);
-    }
 }

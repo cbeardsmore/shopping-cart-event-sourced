@@ -62,9 +62,4 @@ public class AddProductCommand implements Command {
                 Objects.equals(name, command.name) &&
                 Objects.equals(price, command.price);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cartId, productId, name, price);
-    }
 }

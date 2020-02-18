@@ -37,9 +37,4 @@ public final class ProductAddedEvent extends Event {
                 Objects.equals(name, that.name) &&
                 Objects.equals(price, that.price);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(productId, name, price);
-    }
 }

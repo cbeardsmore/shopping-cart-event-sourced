@@ -22,9 +22,4 @@ public final class ProductRemovedEvent extends Event {
         ProductRemovedEvent that = (ProductRemovedEvent) o;
         return Objects.equals(productId, that.productId);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(productId);
-    }
 }

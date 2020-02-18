@@ -27,9 +27,4 @@ public class CreateCartCommand implements Command {
         CreateCartCommand that = (CreateCartCommand) o;
         return Objects.equals(id, that.id);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

@@ -8,8 +8,4 @@ public class Receipt {
     public Receipt(UUID aggregateId) {
         this.aggregateId = aggregateId;
     }
-
-    public UUID getAggregateId() {
-        return aggregateId;
-    }
 }

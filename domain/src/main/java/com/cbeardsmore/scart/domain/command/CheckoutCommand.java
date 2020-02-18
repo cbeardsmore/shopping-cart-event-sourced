@@ -31,9 +31,4 @@ public class CheckoutCommand implements Command {
         CheckoutCommand that = (CheckoutCommand) o;
         return Objects.equals(cartId, that.cartId);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cartId);
-    }
 }

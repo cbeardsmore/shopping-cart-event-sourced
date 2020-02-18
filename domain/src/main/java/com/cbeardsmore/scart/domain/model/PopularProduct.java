@@ -20,9 +20,4 @@ public class PopularProduct {
         return count == that.count &&
                 Objects.equals(productId, that.productId);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(productId, count);
-    }
 }

@@ -22,9 +22,4 @@ public final class CheckoutCompletedEvent extends Event {
         CheckoutCompletedEvent that = (CheckoutCompletedEvent) o;
         return Objects.equals(totalPrice, that.totalPrice);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(totalPrice);
-    }
 }
