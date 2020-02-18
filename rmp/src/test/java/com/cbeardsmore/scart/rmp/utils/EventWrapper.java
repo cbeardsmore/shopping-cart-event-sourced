@@ -4,7 +4,7 @@ import com.cbeardsmore.scart.domain.event.CartCreatedEvent;
 import com.cbeardsmore.scart.domain.event.EventType;
 import com.cbeardsmore.scart.domain.event.ProductAddedEvent;
 import com.cbeardsmore.scart.domain.event.ProductRemovedEvent;
-import com.cbeardsmore.scart.rmp.persistence.EventEnvelope;
+import com.cbeardsmore.scart.dataaccess.EventEnvelope;
 
 import java.util.UUID;
 

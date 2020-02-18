@@ -3,7 +3,7 @@ package com.cbeardsmore.scart.rmp;
 import com.cbeardsmore.scart.domain.event.EventType;
 import com.cbeardsmore.scart.domain.event.ProductAddedEvent;
 import com.cbeardsmore.scart.domain.event.ProductRemovedEvent;
-import com.cbeardsmore.scart.rmp.persistence.EventEnvelope;
+import com.cbeardsmore.scart.dataaccess.EventEnvelope;
 import com.cbeardsmore.scart.rmp.persistence.PostgresRepository;
 import com.cbeardsmore.scart.rmp.projection.CartPriceProjection;
 import com.cbeardsmore.scart.rmp.projection.PopularProductsProjection;

@@ -1,4 +1,4 @@
-package com.cbeardsmore.scart.rmp.persistence;
+package com.cbeardsmore.scart.dataaccess;
 
 import com.cbeardsmore.scart.domain.event.Event;
 

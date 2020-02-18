@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-final class EventAppender {
+public class EventAppender {
 
     private static final String INSERT_SQL =
             "INSERT INTO event_store.events (stream_id, version, event_type, payload) VALUES (?, ?, ?, ?)";

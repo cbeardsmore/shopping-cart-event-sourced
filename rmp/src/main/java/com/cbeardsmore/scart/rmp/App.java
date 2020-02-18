@@ -1,8 +1,8 @@
 package com.cbeardsmore.scart.rmp;
 
+import com.cbeardsmore.scart.dataaccess.EventReader;
 import com.cbeardsmore.scart.rmp.persistence.Bookmark;
-import com.cbeardsmore.scart.rmp.persistence.EventEnvelope;
-import com.cbeardsmore.scart.rmp.persistence.EventReader;
+import com.cbeardsmore.scart.dataaccess.EventEnvelope;
 import com.cbeardsmore.scart.rmp.persistence.PostgresRepository;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
