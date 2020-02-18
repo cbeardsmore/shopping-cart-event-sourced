@@ -13,6 +13,7 @@ import com.cbeardsmore.scart.domain.exception.DuplicateTransactionException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Cart extends AggregateRoot {
@@ -98,5 +99,16 @@ public class Cart extends AggregateRoot {
 
     private void handle(CheckoutCompletedEvent event) {
         orderCompleted = true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cart cart = (Cart) o;
+        return orderCompleted == cart.orderCompleted &&
+                Objects.equals(productPrices, cart.productPrices) &&
+                Objects.equals(productQuantities, cart.productQuantities) &&
+                Objects.equals(price, cart.price);
     }
 }
