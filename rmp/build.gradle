@@ -7,9 +7,9 @@ dependencies {
     testCompile 'org.flywaydb:flyway-core:5.1.3'
 
     // Domain dependency for the Event classes
-    // App dependency for the Eventstore migrations SQL
+    // Dataaccess dependency for the Eventstore/ReadModel migrations SQL
     compile project(':domain')
-    compile project(':app')
+    compile project(':dataaccess')
 }
 
 jar {
