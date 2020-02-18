@@ -19,7 +19,7 @@ public class EventReader {
             "SELECT stream_id, event_type, payload, position FROM event_store.events WHERE position > ? LIMIT 20";
 
     private static final String SELECT_STREAM_ID =
-            "SELECT event_type, payload FROM event_store.events WHERE stream_id = (?) ORDER BY version ASC";
+            "SELECT stream_id, event_type, payload, position FROM event_store.events WHERE stream_id = (?) ORDER BY version ASC";
 
     private static final Gson GSON = new Gson();
     private final DataSource dataSource;
@@ -28,7 +28,7 @@ public class EventReader {
         this.dataSource = dataSource;
     }
 
-    public List<EventEnvelope> readAll(long fromPosition) throws SQLException, ClassNotFoundException {
+    public List<EventEnvelope> readAll(long fromPosition) {
         try (Connection conn = dataSource.getConnection()) {
             try (PreparedStatement statement = conn.prepareStatement(SELECT_ALL)) {
                 statement.setLong(1, fromPosition);
@@ -36,15 +36,17 @@ public class EventReader {
                     return mapToEventEnvelopes(rs);
                 }
             }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
-    final List<? extends Event> readStreamInstance(UUID streamId) {
+    public List<EventEnvelope> readStreamInstance(UUID streamId) {
         try (final var conn = dataSource.getConnection()) {
             try (final var statement = conn.prepareStatement(SELECT_STREAM_ID)) {
                 statement.setObject(1, streamId);
                 try (ResultSet rs = statement.executeQuery()) {
-                    return mapToEvents(rs);
+                    return mapToEventEnvelopes(rs);
                 }
             }
         } catch (SQLException ex) {
@@ -52,7 +54,7 @@ public class EventReader {
         }
     }
 
-    private List<EventEnvelope> mapToEventEnvelopes(ResultSet resultSet) throws SQLException, ClassNotFoundException {
+    private List<EventEnvelope> mapToEventEnvelopes(ResultSet resultSet) throws SQLException {
         final List<EventEnvelope> output = new ArrayList<>();
         while (resultSet.next()) {
             final UUID streamId = resultSet.getObject(1, UUID.class);
@@ -62,18 +64,6 @@ public class EventReader {
             final Class cls = EventType.valueOf(eventType).getClazz();
             final Event event = (Event)GSON.fromJson(payload, cls);
             output.add(new EventEnvelope(streamId, eventType, position, event));
-        }
-        return output;
-    }
-
-    private List<? extends Event> mapToEvents(ResultSet resultSet) throws SQLException {
-        final List<Event> output = new ArrayList<>();
-        while (resultSet.next()) {
-            final String eventType = resultSet.getString(1);
-            final String payload = resultSet.getString(2);
-            final Class cls = EventType.valueOf(eventType).getClazz();
-            final Event event = (Event) GSON.fromJson(payload, cls);
-            output.add(event);
         }
         return output;
     }

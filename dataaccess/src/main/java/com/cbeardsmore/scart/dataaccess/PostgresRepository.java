@@ -17,10 +17,10 @@ public class PostgresRepository implements Repository<Cart> {
 
     @Override
     public Cart load(UUID id) {
-        final var currentState = reader.readStreamInstance(id);
+        final var eventEnvelopes = reader.readStreamInstance(id);
         final var cart = new Cart(id);
-        for (var event : currentState)
-            cart.apply(event);
+        for (var envelope : eventEnvelopes)
+            cart.apply(envelope.getEvent());
         return cart;
     }
 
