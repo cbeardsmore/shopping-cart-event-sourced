@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9e83d636-5582-4814-bb79-cc5eac8e11fb",
+		"_postman_id": "d52f820b-0839-49ca-95d5-b578f8cd402b",
 		"name": "shopping_cart",
 		"description": "Postman scripts for testing of the Shopping Cart REST API.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -191,7 +191,70 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"productId\": \"b00535eb-3adb-417d-b93a-f79bd299f330\",\n\t\"name\": \"42\\\" LG TV\",\n\t\"price\": \"49.99\",\n\t\"quantity\": 3\n}",
+					"raw": "{\n\t\"productId\": \"b00535eb-3adb-417d-b93a-f79bd299f330\",\n\t\"name\": \"42\\\" LG TV\",\n\t\"price\": \"49.99\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/cart/{{CART_ID}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cart",
+						"{{CART_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addProduct 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ebf271b9-3aac-49d5-a6a3-e266d9499ac6",
+						"exec": [
+							"pm.test(\"Status code is 200-OK\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has CartId\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.aggregateId).to.not.eql(undefined);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"productId\": \"6018091c-ce04-41a6-919e-649f27320f77\",\n\t\"name\": \"Nokia 6\",\n\t\"price\": \"200.00\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -354,9 +417,9 @@
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"TotalPrice is 99.98\", function () {",
+							"pm.test(\"TotalPrice is 200.00\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.totalPrice).to.eql(99.98);",
+							"    pm.expect(jsonData.totalPrice).to.eql(200.00);",
 							"});",
 							""
 						],
@@ -432,9 +495,9 @@
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"TotalPrice is 99.98\", function () {",
+							"pm.test(\"TotalPrice is 200.00\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.totalPrice).to.eql(99.98);",
+							"    pm.expect(jsonData.totalPrice).to.eql(200.00);",
 							"});",
 							""
 						],
@@ -498,17 +561,20 @@
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"PopularProducts size is 1\", function () {",
+							"pm.test(\"PopularProducts size is 2\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.popularProducts.length).to.eql(1);",
+							"    pm.expect(jsonData.popularProducts.length).to.eql(2);",
 							"});",
 							"",
 							"pm.test(\"PopularProducts has correct counts\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    var popularProducts = jsonData.popularProducts;",
 							"    ",
-							"    pm.expect(jsonData.popularProducts[0].productId).to.eql('b00535eb-3adb-417d-b93a-f79bd299f330');",
-							"    pm.expect(jsonData.popularProducts[0].count).to.eql(2);",
+							"    pm.expect(jsonData.popularProducts[0].productId).to.eql('6018091c-ce04-41a6-919e-649f27320f77');",
+							"    pm.expect(jsonData.popularProducts[0].count).to.eql(1);",
+							"    ",
+							"    pm.expect(jsonData.popularProducts[1].productId).to.eql('b00535eb-3adb-417d-b93a-f79bd299f330');",
+							"    pm.expect(jsonData.popularProducts[1].count).to.eql(0);",
 							"});",
 							"",
 							""
