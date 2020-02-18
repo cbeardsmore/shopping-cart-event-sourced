@@ -35,3 +35,4 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./build/reports/jacoco/codeCoverage/codeCoverage.xml
+        yml: ./codecov.yml
