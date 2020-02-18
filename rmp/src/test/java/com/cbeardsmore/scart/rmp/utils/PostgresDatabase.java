@@ -9,10 +9,6 @@ import javax.sql.DataSource;
 
 public class PostgresDatabase {
 
-    private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "supersecret";
-    private static final String DB_NAME = "postgres";
-
     private static DataSource dataSource;
     private static Flyway flyway;
 
@@ -29,6 +25,4 @@ public class PostgresDatabase {
         flyway.migrate();
         return dataSource;
     }
-
-
 }

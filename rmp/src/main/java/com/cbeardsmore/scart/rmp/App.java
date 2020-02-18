@@ -13,6 +13,7 @@ import java.util.List;
 
 public class App {
 
+    private static final String POSTGRES_SERVER = "postgres_db";
     private static final String POSTGRES_USERNAME = System.getenv("POSTGRES_USERNAME");
     private static final String POSTGRES_PASSWORD = System.getenv("POSTGRES_PASSWORD");
     private static final String POSTGRES_DATABASE = System.getenv("POSTGRES_DATABASE");
@@ -38,15 +39,15 @@ public class App {
                 Thread.sleep(500);
             }
         } catch (final Exception ex) {
-            LOGGER.error("A fatal error occurred and the Shopping Cart RMP is shutting down.", ex);
+            LOGGER.error("Exception was caught and Shopping Cart RMP is going down...", ex);
             System.exit(1);
         }
     }
 
     private static DataSource getPostgresDataSource() {
         final var dataSource = new PGSimpleDataSource();
-        dataSource.setServerName("postgres_db");
         dataSource.setPortNumber(5432);
+        dataSource.setServerName(POSTGRES_SERVER);
         dataSource.setDatabaseName(POSTGRES_DATABASE);
         dataSource.setUser(POSTGRES_USERNAME);
         dataSource.setPassword(POSTGRES_PASSWORD);
