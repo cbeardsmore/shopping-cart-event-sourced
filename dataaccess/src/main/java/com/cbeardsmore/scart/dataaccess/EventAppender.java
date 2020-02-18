@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import org.postgresql.util.PGobject;
 
 import javax.sql.DataSource;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
@@ -30,11 +29,12 @@ public class EventAppender {
         try (final var conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
             for (var event : events) {
-                final PreparedStatement statement = conn.prepareStatement(INSERT_SQL);
-                final PGobject payloadJson = toPgJson(event);
+                final var statement = conn.prepareStatement(INSERT_SQL);
+                final var payloadJson = toPgJson(event);
+                final var eventType = EventType.fromClass(event.getClass()).name();
                 statement.setObject(1, streamId);
                 statement.setInt(2, version);
-                statement.setString(3, EventType.fromClass(event.getClass()).name());
+                statement.setString(3, eventType);
                 statement.setObject(4, payloadJson);
                 statement.executeUpdate();
                 version++;
@@ -46,10 +46,9 @@ public class EventAppender {
     }
 
     private PGobject toPgJson(Object source) throws SQLException {
-        final String json = GSON.toJson(source);
-        final PGobject jsonObject = new PGobject();
+        final var jsonObject = new PGobject();
+        jsonObject.setValue(GSON.toJson(source));
         jsonObject.setType("json");
-        jsonObject.setValue(json);
         return jsonObject;
     }
 }
